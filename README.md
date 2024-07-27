@@ -1,6 +1,6 @@
 # **FaceSegmentation**
 
-> [!Tip]
+> [!Note]
 > The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
 
 * 📄 Paper with detailed explanation of the structure of the combination of `CLIP-DINO-SAM` models: <link>
