@@ -1,6 +1,8 @@
 # Face-Segmentation
 Zero-Shot Face segmentation with CLIP, Grounding DINO and Grounding SAM
 
+
+# 💿 Installation
 Clone repo
 ```bash
 git clone https://github.com/Mikzarjr/Face-Segmentation
