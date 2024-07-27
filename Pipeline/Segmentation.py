@@ -1,4 +1,4 @@
-from Pipeline.Config import *
+from FaceSegmentation.Pipeline.Config import *
 
 
 class single_image_segmentation:
