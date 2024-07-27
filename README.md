@@ -31,6 +31,7 @@ image_path = f"{IMGS_DIR}/img1.jpeg"
 #
 ### Run the following cell to get segmentation masks
 Main segmentation mask is located in /segmentation/combined_masks
+#
 All separate masks are located in /segmentation/split_masks
 ```python
 S = single_image_segmentation(image_path)
