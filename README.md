@@ -1,9 +1,15 @@
 # **FaceSegmentation**
 
-  
-Combination of `CLIP-DINO-SAM` models - for raw dataset labelling and YOLO - for fast and precise segmentation
+> [!Spoiler]
+> The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
 
-📄 Paper with detailed explanation of how the combination of `CLIP-DINO-SAM` models works: <link>
+* 📄 Paper with detailed explanation of the structure of the combination of `CLIP-DINO-SAM` models: <link>
+* :octocat: Github with detailed workflow of labelling data with `CLIP-DINO-SAM` for `YOLO`
+* ">:octocat:
+
+
+## 📚 Basic Concepts
+
 
 #
 # 💿 Installation
