@@ -6,4 +6,5 @@ Clone repo
 !git clone https://github.com/Mikzarjr/Face-Segmentation
 
 Install requirements
+
 !pip install -r FaceSegmentation/requirements.txt
