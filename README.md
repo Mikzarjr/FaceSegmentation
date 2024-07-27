@@ -1,8 +1,11 @@
 # **FaceSegmentation**
 
   
-Combination of CLIP-DINO-SAM models - for raw dataset labelling and YOLO - for fast and precise segmentation
+Combination of `CLIP-DINO-SAM` models - for raw dataset labelling and YOLO - for fast and precise segmentation
 
+📄 Paper with detailed explanation of how the combination of `CLIP-DINO-SAM` models works: <link>
+
+#
 # 💿 Installation
 ### Clone repo
 ```bash
@@ -13,7 +16,7 @@ git clone https://github.com/Mikzarjr/Face-Segmentation
 ```bash
 pip install -r FaceSegmentation/requirements.txt
 ```
-#
+
 # 🚀 Quickstart
 ### Import dependencies
 ```python
