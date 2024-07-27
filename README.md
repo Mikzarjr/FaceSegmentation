@@ -1,5 +1,5 @@
 # **FaceSegmentation**
-<div align="center">
+<div align="center" style=font-size: 100px">
   <p>
     <a align="center" target="_blank">
       <b style="font-size: 24px; ">FaceSegmentation</b>
