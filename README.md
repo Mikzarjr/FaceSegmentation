@@ -2,7 +2,7 @@
 <div align="center">
   <p>
     <a align="center" target="_blank">
-      <span style="font-size: 24px; font-weight: bold; color: #007BFF;">FaceSegmentation</span>
+      <span style="font-size: 100px; font-weight: bold; color: #007BFF;">FaceSegmentation</span>
     </a>
   </p>
 </div>
