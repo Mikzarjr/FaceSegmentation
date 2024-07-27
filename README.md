@@ -1,7 +1,7 @@
 # **FaceSegmentation**
 <div align="center">
   <p>
-    <a align="center" target="_blank" style="font-size: 24; font-weight: bold; color: #007BFF;">
+    <a align="center" target="_blank" style="font-size: 52; font-weight: bold; color: #007BFF;">
       FaceSegmentation
     </a>
   </p>
