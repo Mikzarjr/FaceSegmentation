@@ -3,9 +3,10 @@
 > [!Note]
 > The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
 
-* 📄 Paper with detailed explanation of the structure of the combination of `CLIP-DINO-SAM` models: <link>
-* :octocat: Github with detailed workflow of labelling data with `CLIP-DINO-SAM` for `YOLO`
-* ">:octocat:
+> [!Tip]
+> 📄 Paper with detailed explanation of the structure of the combination of `CLIP-DINO-SAM` models: <link>
+> :octocat: Github with detailed workflow of labelling data with `CLIP-DINO-SAM` for `YOLO`
+> ">:octocat:
 
 
 ## 📚 Basic Concepts
