@@ -1,21 +1,11 @@
 # **FaceSegmentation**
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Styled Text Example</title>
-</head>
-<body>
-  <div align="center">
-    <p>
-      <a align="center" target="_blank" style="font-size: 24px; font-weight: bold; color: #007BFF;">
-        FaceSegmentation
-      </a>
-    </p>
-  </div>
-</body>
-</html>
+<div align="center">
+  <p>
+    <a align="center" target="_blank">
+      <span style="font-size: 24px; font-weight: bold; color: #007BFF;">FaceSegmentation</span>
+    </a>
+  </p>
+</div>
   
 Combination of CLIP-DINO-SAM models - for raw dataset labelling and YOLO - for fast and precise segmentation
 
