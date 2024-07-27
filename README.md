@@ -1,6 +1,6 @@
 # **FaceSegmentation**
-<div align="center" style="font-size: 100px">
-  <a>
+<div align="center">
+  <a  style="font-size: 100px">
       FaceSegmentation
   </a>
 </div>
