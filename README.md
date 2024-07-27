@@ -21,13 +21,11 @@ from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Pipeline.Segmentation import single_image_segmentation
 ```
 #
-#
 ### Choose image to test the framework 
 sample images are located in FaceSegmentation/TestImages
 ```python
 image_path = f"{IMGS_DIR}/img1.jpeg"
 ```
-#
 #
 ### Run the following cell to get segmentation masks
 Main segmentation mask is located in /segmentation/combined_masks
