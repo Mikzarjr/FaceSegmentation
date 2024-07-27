@@ -1,10 +1,8 @@
 # **FaceSegmentation**
 <div align="center" style="font-size: 100px">
-  <p>
-    <a align="center" target="_blank">
-      <b style="font-size: 24px; ">FaceSegmentation</b>
-    </a>
-  </p>
+  <a>
+      FaceSegmentation
+  </a>
 </div>
   
 Combination of CLIP-DINO-SAM models - for raw dataset labelling and YOLO - for fast and precise segmentation
