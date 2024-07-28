@@ -1,4 +1,4 @@
-# **FaceSegmentation**
+![photo_2024-07-28 14 18 53](https://github.com/user-attachments/assets/98945148-1905-43a0-8e96-d6afc2146f86)# **FaceSegmentation**
 
 ### The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
 
@@ -7,8 +7,22 @@
 >
 > :octocat: Github with detailed workflow of labelling data with `CLIP-DINO-SAM` for `YOLO`: [Github]([(https://pdf.com)](https://github.com/Mikzarjr/Ultimate-Segmentation))
 
+# 👀 Example Output
+Here are example predictions of YOLO model segmenting parts of face after being trained on an auto-labeled dataset using `CLIP-DINO-SAM`
 
-## 📚 Basic Concepts
+<div align="center">
+  <p>
+    <a align="center" href="" target="_blank">
+      <img
+        width="850"
+        src=""
+      >
+    </a>
+  </p>
+</div>
+
+# 📚 Basic Concepts
+
 
 
 #
