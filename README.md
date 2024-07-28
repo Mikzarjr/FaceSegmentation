@@ -1,8 +1,8 @@
 # **FaceSegmentation**
-
-### The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
-
 > [!Note]
+> ### The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
+
+> [!Tip]
 > 📄 Paper with detailed explanation of the structure of the combination of `CLIP-DINO-SAM` models: [PDF](https://pdf.com)
 >
 > :octocat: Github with detailed workflow of labelling data with `CLIP-DINO-SAM` for `YOLO`: [Github]([(https://pdf.com)](https://github.com/Mikzarjr/Ultimate-Segmentation))
