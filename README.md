@@ -1,4 +1,4 @@
-![photo_2024-07-28 14 18 53](https://github.com/user-attachments/assets/98945148-1905-43a0-8e96-d6afc2146f86)# **FaceSegmentation**
+# **FaceSegmentation**
 
 ### The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
 
