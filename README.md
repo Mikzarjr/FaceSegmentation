@@ -44,6 +44,10 @@ git clone https://github.com/Mikzarjr/Face-Segmentation
 ```bash
 pip install -r FaceSegmentation/requirements.txt
 ```
+or
+```bash
+pip install -e setup.py
+```
 
 # 🚀 Quickstart
 ### Import dependencies
