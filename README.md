@@ -49,7 +49,7 @@ pip install -r FaceSegmentation/requirements.txt
 ### Import dependencies
 ```python
 from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Pipeline.Segmentation import single_image_segmentation
+from FaceSegmentation.Pipeline.Segmentation import FaceSegmentation
 ```
 
 ### Choose image to test the framework 
@@ -63,7 +63,7 @@ Main segmentation mask is located in /segmentation/combined_masks
 
 All separate masks are located in /segmentation/split_masks
 ```python
-S = single_image_segmentation(image_path)
+S = FaceSegmentation(image_path)
 S.Segment()
 ```
 

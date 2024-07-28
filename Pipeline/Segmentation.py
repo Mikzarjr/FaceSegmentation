@@ -1,7 +1,7 @@
 from FaceSegmentation.Pipeline.Config import *
 
 
-class single_image_segmentation:
+class FaceSegmentation:
     def __init__(self, image_path):
         self.image_path = image_path
         self.WORK_DIR = f'{MAIN_DIR}/segmentation'
@@ -27,7 +27,8 @@ class single_image_segmentation:
     def Segment(self):
         self.MakeDirs()
         self.SegmentImage()
-        self.save_mask()
+        self.SaveMask()
+        self.DeleteOtherMasks()
 
     def SegmentImage(self):
         all_results = []
@@ -53,25 +54,25 @@ class single_image_segmentation:
 
         for i in self.CLASSES:
             if i == 'face':
-                FACE = self.FACE_without_intersections()
+                FACE = self.FACE_WithoutIntersections()
                 Image.fromarray(FACE).save(f"{self.SPLIT_MASK_DIR}/face_WI.jpg")
             elif i == 'eyes':
-                EYES = self.EYES_without_intersections()
+                EYES = self.EYES_WithoutIntersections()
                 Image.fromarray(EYES).save(f"{self.SPLIT_MASK_DIR}/eyes_WI.jpg")
             elif i == 'nose':
-                NOSE = self.NOSE_without_intersections()
+                NOSE = self.NOSE_WithoutIntersections()
                 Image.fromarray(NOSE).save(f"{self.SPLIT_MASK_DIR}/nose_WI.jpg")
             elif i == 'glasses':
-                GLASSES = self.GLASSES_without_intersections()
+                GLASSES = self.GLASSES_WithoutIntersections()
                 Image.fromarray(GLASSES).save(f"{self.SPLIT_MASK_DIR}/glasses_WI.jpg")
             elif i == 'hair':
-                HAIR = self.HAIR_without_intersections()
+                HAIR = self.HAIR_WithoutIntersections()
                 Image.fromarray(HAIR).save(f"{self.SPLIT_MASK_DIR}/hair_WI.jpg")
             else:
-                CLASS = self.ALL_without_intersection(i)
+                CLASS = self.REST_WithoutIntersection(i)
                 Image.fromarray(CLASS).save(f"{self.SPLIT_MASK_DIR}/{i}_WI.jpg")
 
-    def FACE_without_intersections(self):
+    def FACE_WithoutIntersections(self):
         FACE = cv2.imread(f"{self.SPLIT_MASK_DIR}/face.jpg", cv2.IMREAD_GRAYSCALE)
 
         for i in self.CLASSES:
@@ -81,7 +82,7 @@ class single_image_segmentation:
                 FACE = cv2.bitwise_and(FACE, cv2.bitwise_not(intersection))
         return FACE
 
-    def HAIR_without_intersections(self):
+    def HAIR_WithoutIntersections(self):
         HAIR = cv2.imread(f"{self.SPLIT_MASK_DIR}/hair.jpg", cv2.IMREAD_GRAYSCALE)
 
         instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/face.jpg", cv2.IMREAD_GRAYSCALE)
@@ -97,7 +98,7 @@ class single_image_segmentation:
         HAIR = cv2.bitwise_and(HAIR, cv2.bitwise_not(intersection))
         return HAIR
 
-    def EYES_without_intersections(self):
+    def EYES_WithoutIntersections(self):
         EYES = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyes.jpg", cv2.IMREAD_GRAYSCALE)
 
         instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/nose.jpg", cv2.IMREAD_GRAYSCALE)
@@ -109,7 +110,7 @@ class single_image_segmentation:
         EYES = cv2.bitwise_and(EYES, cv2.bitwise_not(intersection))
         return EYES
 
-    def GLASSES_without_intersections(self):
+    def GLASSES_WithoutIntersections(self):
         GLASSES = cv2.imread(f"{self.SPLIT_MASK_DIR}/glasses.jpg", cv2.IMREAD_GRAYSCALE)
 
         instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyes.jpg", cv2.IMREAD_GRAYSCALE)
@@ -125,7 +126,7 @@ class single_image_segmentation:
         GLASSES = cv2.bitwise_and(GLASSES, cv2.bitwise_not(intersection))
         return GLASSES
 
-    def NOSE_without_intersections(self):
+    def NOSE_WithoutIntersections(self):
         NOSE = cv2.imread(f"{self.SPLIT_MASK_DIR}/nose.jpg", cv2.IMREAD_GRAYSCALE)
 
         instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/mouth.jpg", cv2.IMREAD_GRAYSCALE)
@@ -137,12 +138,12 @@ class single_image_segmentation:
         NOSE = cv2.bitwise_and(NOSE, cv2.bitwise_not(intersection))
         return NOSE
 
-    def ALL_without_intersection(self, CLASS):
+    def REST_WithoutIntersection(self, CLASS):
         CLASS = cv2.imread(f"{self.SPLIT_MASK_DIR}/{CLASS}.jpg", cv2.IMREAD_GRAYSCALE)
         return CLASS
 
     @staticmethod
-    def paint(image_path, color):
+    def Paint(image_path, color):
         image = cv2.imread(image_path, cv2.IMREAD_COLOR)
 
         mask = np.any(image >= 50, axis=2)
@@ -153,20 +154,39 @@ class single_image_segmentation:
 
         return image
 
-    def get_image_name(self):
+    def GetImageName(self):
         image_name = os.path.basename(self.image_path)
         name, _ = os.path.splitext(image_name)
         return name
 
-    def save_mask(self):
+    def SaveMask(self):
         img = cv2.imread(f'{self.SPLIT_MASK_DIR}/face_WI.jpg')
         combined_mask = np.zeros_like(img)
 
         for i in range(len(self.CLASSES)):
             path = f"{self.SPLIT_MASK_DIR}/{self.CLASSES[i]}_WI.jpg"
-            mask = self.paint(path, self.COLORS[i])
+            mask = self.Paint(path, self.COLORS[i])
             combined_mask += mask
 
         annotated_frame_pil = Image.fromarray(combined_mask)
-        image_name = self.get_image_name()
+        image_name = self.GetImageName()
         annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{image_name}.jpg")
+
+    def DeleteOtherMasks(self):
+        """
+        Deletes all files in the SPLIT_MASK_DIR that do not have "WI" in their name.
+        Renames files containing "WI" by removing "WI" from their names.
+        """
+        for file in os.listdir(self.SPLIT_MASK_DIR):
+            if "WI" not in file:
+                file_path = os.path.join(self.SPLIT_MASK_DIR, file)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+
+        for file in os.listdir(self.SPLIT_MASK_DIR):
+            if "WI" in file:
+                new_file_name = file.replace("_WI", "")
+                old_file_path = os.path.join(self.SPLIT_MASK_DIR, file)
+                new_file_path = os.path.join(self.SPLIT_MASK_DIR, new_file_name)
+                if os.path.isfile(old_file_path):
+                    os.rename(old_file_path, new_file_path)

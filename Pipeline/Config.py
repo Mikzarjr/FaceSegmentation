@@ -10,4 +10,4 @@ import supervision as sv
 from tqdm import tqdm
 
 MAIN_DIR = os.getcwd()
-IMGS_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/TestImages")
+IMGS_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/TestImages")
