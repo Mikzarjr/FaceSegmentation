@@ -12,10 +12,18 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 
 <div align="center">
   <p>
-    <a align="center" href="" target="_blank">
+    <a align="center" href="https://github.com/Mikzarjr/FaceSegmentation/blob/main/docks/demo_media/CDS_Output_1.jpeg" target="_blank">
       <img
-        width="850"
-        src=""
+        width="425"
+        src="https://github.com/Mikzarjr/FaceSegmentation/blob/main/docks/demo_media/CDS_Output_1.jpeg"
+        alt="CDS Output 1"
+      >
+    </a>
+    <a align="center" href="https://github.com/Mikzarjr/FaceSegmentation/blob/main/docks/demo_media/CDS_Output_2.jpeg" target="_blank">
+      <img
+        width="425"
+        src="https://github.com/Mikzarjr/FaceSegmentation/blob/main/docks/demo_media/CDS_Output_2.jpeg"
+        alt="CDS Output 2"
       >
     </a>
   </p>
