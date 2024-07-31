@@ -4,7 +4,9 @@ from FaceSegmentation.Pipeline.Config import *
 class FaceSegmentation:
     def __init__(self, image_path):
         self.image_path = image_path
-        self.WORK_DIR = f'{MAIN_DIR}/segmentation'
+        self.SEG_DIR = f'{self.MAIN_DIR}/segmentation'
+        image_name = self.GetImageName()
+        self.WORK_DIR = f'{self.SEG_DIR}/{image_name}'
         self.SPLIT_MASK_DIR = f'{self.WORK_DIR}/split_masks'
         self.COMBINED_MASK_DIR = f'{self.WORK_DIR}/combined_masks'
         self.CLASSES = ['face', 'eyebrows', 'eyes', 'hair', 'mouth', 'neck', 'ears', 'nose', 'glasses']
@@ -20,6 +22,7 @@ class FaceSegmentation:
                        [191, 255, 0]]
 
     def MakeDirs(self):
+        os.makedirs(self.SEG_DIR, exist_ok=True)
         os.makedirs(self.WORK_DIR, exist_ok=True)
         os.makedirs(self.SPLIT_MASK_DIR, exist_ok=True)
         os.makedirs(self.COMBINED_MASK_DIR, exist_ok=True)
