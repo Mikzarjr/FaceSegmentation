@@ -4,7 +4,7 @@ from FaceSegmentation.Pipeline.Config import *
 class FaceSegmentation:
     def __init__(self, image_path):
         self.image_path = image_path
-        self.SEG_DIR = f'{self.MAIN_DIR}/segmentation'
+        self.SEG_DIR = f'{MAIN_DIR}/segmentation'
         image_name = self.GetImageName()
         self.WORK_DIR = f'{self.SEG_DIR}/{image_name}'
         self.SPLIT_MASK_DIR = f'{self.WORK_DIR}/split_masks'
