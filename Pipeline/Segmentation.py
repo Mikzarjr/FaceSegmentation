@@ -1,7 +1,7 @@
 from FaceSegmentation.Pipeline.Config import *
 
 
-class FaceSegmentation:
+class FaceSeg:
     def __init__(self, image_path):
         self.image_path = image_path
         self.SEG_DIR = f'{MAIN_DIR}/segmentation'

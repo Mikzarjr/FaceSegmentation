@@ -2,7 +2,7 @@ import re
 import setuptools
 from setuptools import find_packages
 
-with open("./FaceSegmentation/__init__.py", "r") as f:
+with open("./FaceSeg/__init__.py", "r") as f:
     content = f.read()
     version = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', content).group(1)
 
@@ -10,7 +10,7 @@ with open("README.md", "r", encoding="UTF-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="FaceSegmentation",
+    name="FaceSeg",
     version=version,
     author="Mikzarjr",
     author_email="mikzar.jr@gmail.com",
