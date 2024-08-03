@@ -51,7 +51,7 @@ class CreateJson:
                 coco_data["annotations"] += annotations
             elif len(annotations) > 1:
                 for i in range(len(annotations)):
-                    coco_data["annotations"] += annotations[i]
+                    coco_data["annotations"] += [annotations[i]]
 
         self.Json = "coco_annotations"
         with open(f"{self.Json}.json", "w") as json_file:
@@ -64,12 +64,11 @@ class CreateJson:
 
         id = counter
         image_id = 0
-        CLASSES = ['face', 'ears', 'eyebrow', 'eyes', 'glasses', 'nose', 'hair', 'mouth', 'neck']
+        CLASSES = ['face', 'ears', 'eyebrows', 'eyes', 'glasses', 'nose', 'hair', 'mouth', 'neck']
         category_id = CLASSES.index(ClassName)
 
         image_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
         bbox, area = self.bbox(image_path)
-
         for i in range(len(bbox)):
             annotation = {
                 "id": id,
@@ -88,8 +87,6 @@ class CreateJson:
         BB = bboxes(image_path)
         bbs = BB.GetBboxCoords()
         areas = BB.Area()
-
-        BB.Visualize()
         return bbs, areas
 
     def polygon(self):
