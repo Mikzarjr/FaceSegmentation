@@ -28,7 +28,7 @@ class FaceSeg:
         os.makedirs(self.SPLIT_MASK_DIR, exist_ok=True)
         os.makedirs(self.COMBINED_MASK_DIR, exist_ok=True)
         img = cv2.imread(self.image_path)
-        img.save(f"{self.WORK_DIR}/{self.image_name}.jpg")
+        Image.fromarray(img).save(f"{self.WORK_DIR}/{self.image_name}.jpg")
 
     def Segment(self):
         self.MakeDirs()

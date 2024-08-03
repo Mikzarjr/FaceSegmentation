@@ -16,7 +16,7 @@ class bboxes():
 
         for cntr in contours:
             x, y, w, h = cv2.boundingRect(cntr)
-            if w * h > 100:
+            if w * h > 400:
                 self.BBoxes.append([x, y, w, h])
 
         return self.BBoxes
@@ -41,3 +41,4 @@ class bboxes():
             for bbox in self.BBoxes:
                 area = bbox[2] * bbox[3]
                 self.Areas.append(area)
+        return self.Areas

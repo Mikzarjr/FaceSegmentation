@@ -9,9 +9,9 @@ class CreateJson:
         self.image_path = image_path
         self.image_dir = GetImageDir(image_path)
         self.image_name = GetImageName(image_path)
+        self.mask_dir = f"{self.image_dir}/split_masks"
         self.Json = None
         self.ImageHeight, self.ImageWidth = GetImageDimensions(image_path)
-        # self.ClassName = None
 
     def CheckJson(self):
         if self.Json is None:
@@ -30,7 +30,7 @@ class CreateJson:
             coco.showAnns(anns)
 
     def CreateJsonAnnotation(self):
-        with open(f'{MAIN_DIR}/docks/Constant/Formats/JSON/ConstantData.json', 'r') as f:
+        with open(f'{MAIN_DIR}/FaceSegmentation/docks/Constant/Formats/JSON/ConstantData.json', 'r') as f:
             coco_data = json.load(f)
 
         image_info = {
@@ -42,9 +42,9 @@ class CreateJson:
         }
         coco_data["images"] = [image_info]
 
-        folder = os.listdir(self.image_dir)
+        folder = os.listdir(self.mask_dir)
         for counter in range(len(folder)):
-            file_path = os.path.join(self.image_dir, folder[counter])
+            file_path = folder[counter]
             ClassName = GetImageName(file_path)
             annotations = self.Annotate(ClassName, counter)
             if len(annotations) == 1:
@@ -67,8 +67,8 @@ class CreateJson:
         CLASSES = ['face', 'eyebrows', 'eyes', 'hair', 'mouth', 'neck', 'ears', 'nose', 'glasses']
         category_id = CLASSES.index(ClassName)
 
-        bbox = self.bbox("bbox")
-        area = self.bbox("area")
+        image_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
+        bbox, area = self.bbox(image_path)
 
         for i in range(len(bbox)):
             annotation = {
@@ -84,14 +84,13 @@ class CreateJson:
 
         return Annotations
 
-    def bbox(self, task):
-        BB = bboxes(self.image_path)
+    def bbox(self, image_path):
+        BB = bboxes(image_path)
         bbs = BB.GetBboxCoords()
-        if task == "bbox":
-            return bbs
-        elif task == "area":
-            areas = BB.Area()
-            return areas
+        areas = BB.Area()
+
+        BB.Visualize()
+        return bbs, areas
 
     def polygon(self):
         return [[0]]
