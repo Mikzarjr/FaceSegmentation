@@ -1,12 +1,13 @@
 from FaceSegmentation.Pipeline.Config import *
+from FaceSegmentation.Tools import *
 
 
 class FaceSeg:
     def __init__(self, image_path):
         self.image_path = image_path
         self.SEG_DIR = f'{MAIN_DIR}/segmentation'
-        image_name = self.GetImageName()
-        self.WORK_DIR = f'{self.SEG_DIR}/{image_name}'
+        self.image_name = GetImageName(image_path)
+        self.WORK_DIR = f'{self.SEG_DIR}/{self.image_name}'
         self.SPLIT_MASK_DIR = f'{self.WORK_DIR}/split_masks'
         self.COMBINED_MASK_DIR = f'{self.WORK_DIR}/combined_masks'
         self.CLASSES = ['face', 'eyebrows', 'eyes', 'hair', 'mouth', 'neck', 'ears', 'nose', 'glasses']
@@ -157,10 +158,10 @@ class FaceSeg:
 
         return image
 
-    def GetImageName(self):
-        image_name = os.path.basename(self.image_path)
-        name, _ = os.path.splitext(image_name)
-        return name
+    # def GetImageName(self):
+    #     image_name = os.path.basename(self.image_path)
+    #     name, _ = os.path.splitext(image_name)
+    #     return name
 
     def SaveMask(self):
         img = cv2.imread(f'{self.SPLIT_MASK_DIR}/face_WI.jpg')
@@ -172,8 +173,7 @@ class FaceSeg:
             combined_mask += mask
 
         annotated_frame_pil = Image.fromarray(combined_mask)
-        image_name = self.GetImageName()
-        annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{image_name}.jpg")
+        annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{self.image_name}.jpg")
 
     def DeleteOtherMasks(self):
         """
