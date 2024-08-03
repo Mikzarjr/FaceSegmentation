@@ -33,7 +33,7 @@ class CreateJson:
         image_info = {
             "id": 0,
             "license": 1,
-            "file_name": "{IMAGE_NAME}.jpeg",
+            "file_name": f"{self.image_path}.jpeg",
             "height": self.ImageHeight,
             "width": self.ImageWidth
         }
