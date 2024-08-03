@@ -64,7 +64,7 @@ class CreateJson:
 
         id = counter
         image_id = 0
-        CLASSES = ['face', 'eyebrows', 'eyes', 'hair', 'mouth', 'neck', 'ears', 'nose', 'glasses']
+        CLASSES = ['face', 'ears', 'eyebrow', 'eyes', 'glasses', 'nose', 'hair', 'mouth', 'neck']
         category_id = CLASSES.index(ClassName)
 
         image_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
