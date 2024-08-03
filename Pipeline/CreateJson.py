@@ -15,7 +15,7 @@ class CreateJson:
             print(f"Run CreateJsonAnnotation to create one")
         else:
             coco = COCO(f'{MAIN_DIR}/{self.json}.json')
-            img_dir = f'{image_path}'
+            img_dir = f'{self.image_path}'
             image_id = 0
             img = coco.imgs[image_id]
             image = np.array(Image.open(os.path.join(img_dir, img['file_name'])))
