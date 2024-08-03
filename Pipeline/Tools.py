@@ -10,3 +10,9 @@ def GetImageName(image_path):
 def GetImageDir(image_path):
     directory = os.path.dirname(image_path)
     return directory
+
+
+def GetImageDimensions(image_path):
+    with Image.open(image_path) as img:
+        width, height = img.size
+    return width, height

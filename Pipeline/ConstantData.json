@@ -47,13 +47,6 @@
     }
   ],
   "images": [
-    {
-      "id": 0,
-      "license": 1,
-      "file_name": f
-      "{IMAGE_NAME}.jpeg",
-      "height": 640,
-      "width": 640
-    }
+    None
   ]
 }

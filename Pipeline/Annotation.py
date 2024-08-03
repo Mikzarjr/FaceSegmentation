@@ -8,6 +8,7 @@ class CreateJson:
         self.image_dir = GetImageDir(image_path)
         self.image_name = GetImageName(image_path)
         self.Json = None
+        self.ImageHeight, self.ImageWidth = GetImageDimensions(image_path)
 
     def CheckJson(self):
         if self.Json is None:
@@ -28,6 +29,16 @@ class CreateJson:
     def CreateJsonAnnotation(self):
         with open('ConstantData.json', 'r') as f:
             coco_data = json.load(f)
+
+        image_info = {
+            "id": 0,
+            "license": 1,
+            "file_name": "{IMAGE_NAME}.jpeg",
+            "height": self.ImageHeight,
+            "width": self.ImageWidth
+        }
+
+        coco_data["images"] = [image_info]
 
         self.Json = "coco_annotations"
         with open(f"{self.Json}.json", "w") as json_file:
