@@ -7,14 +7,14 @@ class CreateJson:
         self.image_path = image_path
         self.image_dir = GetImageDir(image_path)
         self.image_name = GetImageName(image_path)
-        self.json = None
+        self.Json = None
 
     def CheckJson(self):
-        if self.json is None:
+        if self.Json is None:
             print(f"There is no json annotation for '{self.image_name}'")
             print("Run 'CreateJsonAnnotation' to create one")
         else:
-            coco = COCO(f'{MAIN_DIR}/{self.json}.json')
+            coco = COCO(f'{MAIN_DIR}/{self.Json}.json')
             img_dir = self.image_dir
             image_id = 0
             img = coco.imgs[image_id]
@@ -29,8 +29,8 @@ class CreateJson:
         with open('ConstantData.json', 'r') as f:
             coco_data = json.load(f)
 
-        json_name = "coco_annotations"
-        with open(f"{json_name}.json", "w") as json_file:
+        self.Json = "coco_annotations"
+        with open(f"{self.Json}.json", "w") as json_file:
             json.dump(coco_data, json_file, indent=4)
 
-        self.json = json_name
+        self.Json = self.Json
