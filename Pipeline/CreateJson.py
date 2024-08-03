@@ -1,10 +1,11 @@
 from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Tools import GetImageName
+from FaceSegmentation.Tools import *
 
 C
 class CreateJson:
     def __init__(self, image_path, json_name):
         self.image_path = image_path
+        self.image_dir = GetImageDir(image_path)
         self.image_name = GetImageName(image_path)
         self.json = None
         self.json_name = json_name
@@ -15,7 +16,7 @@ class CreateJson:
             print(f"Run CreateJsonAnnotation to create one")
         else:
             coco = COCO(f'{MAIN_DIR}/{self.json}.json')
-            img_dir = f'{self.image_path}'
+            img_dir = {self.image_dir}
             image_id = 0
             img = coco.imgs[image_id]
             image = np.array(Image.open(os.path.join(img_dir, img['file_name'])))
