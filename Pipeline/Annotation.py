@@ -27,7 +27,7 @@ class CreateJson:
             coco.showAnns(anns)
 
     def CreateJsonAnnotation(self):
-        with open('ConstantData.json', 'r') as f:
+        with open('FaceSegmentation/docks/Constant/Formats/JSON/ConstantData.json', 'r') as f:
             coco_data = json.load(f)
 
         image_info = {
