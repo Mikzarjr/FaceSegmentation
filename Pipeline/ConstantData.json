@@ -1,0 +1,59 @@
+{
+  "info": {
+    "year": "2024",
+    "version": "1",
+    "description": ""
+  },
+  "categories": [
+    {
+      "id": 0,
+      "name": "face"
+    },
+    {
+      "id": 1,
+      "name": "ears"
+    },
+    {
+      "id": 2,
+      "name": "eyebrow"
+    },
+    {
+      "id": 3,
+      "name": "eyes"
+    },
+    {
+      "id": 4,
+      "name": "face"
+    },
+    {
+      "id": 5,
+      "name": "glasses"
+    },
+    {
+      "id": 6,
+      "name": "hair"
+    },
+    {
+      "id": 7,
+      "name": "mouth"
+    },
+    {
+      "id": 8,
+      "name": "neck"
+    },
+    {
+      "id": 9,
+      "name": "nose"
+    }
+  ],
+  "images": [
+    {
+      "id": 0,
+      "license": 1,
+      "file_name": f
+      "{IMAGE_NAME}.jpeg",
+      "height": 640,
+      "width": 640
+    }
+  ]
+}
