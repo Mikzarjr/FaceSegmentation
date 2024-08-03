@@ -52,8 +52,8 @@ pip install -e setup.py
 # 🚀 Quickstart
 ### Import dependencies
 ```python
-from FaceSeg.Pipeline.Config import *
-from FaceSeg.Pipeline.Segmentation import FaceSeg
+from FaceSegmentation.Pipeline.Config import *
+from FaceSegmentation.Pipeline.Segmentation import FaceSeg
 ```
 
 ### Choose image to test the framework 
@@ -70,7 +70,14 @@ All separate masks are located in /segmentation/split_masks
 S = FaceSeg(image_path)
 S.Segment()
 ```
-
+### Create COCO.json annotations
+```python
+from FaceSegmentation.Pipeline.CreateJson import CreateJson
+```
+```python
+A = CreateJson(image_path)
+A.CreateJsonAnnotation()
+```
 
 
 
