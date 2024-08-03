@@ -1,5 +1,5 @@
 from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Tools import *
+from FaceSegmentation.Pipeline.Tools import *
 
 
 class FaceSeg:
