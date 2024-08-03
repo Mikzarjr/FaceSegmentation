@@ -72,11 +72,15 @@ S.Segment()
 ```
 ### Create COCO.json annotations
 ```python
-from FaceSegmentation.Pipeline.CreateJson import CreateJson
+from FaceSegmentation.Pipeline.Annotator import CreateJson
+```
+```python
+image_path = "/content/segmentation/img1/img1.jpg"
 ```
 ```python
 A = CreateJson(image_path)
 A.CreateJsonAnnotation()
+A.CheckJson()
 ```
 
 
