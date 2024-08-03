@@ -51,8 +51,8 @@ pip install -e setup.py
 
 # 🚀 Quickstart
 
-# 🚀 Workthrough
-## `CLIP-DINO-SAM` segmentation
+# 📑 Workthrough
+## `CLIP-DINO-SAM` segmentation 🎨
 
 ### Import dependencies
 ```python
@@ -75,7 +75,7 @@ S = FaceSeg(image_path)
 S.Segment()
 ```
 
-## Annotations for training YOLO
+## Annotations for training YOLO 📝
 
 ### Create COCO.json annotations
 ```python
