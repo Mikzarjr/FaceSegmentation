@@ -27,13 +27,13 @@ class CreateJson:
             coco.showAnns(anns)
 
     def CreateJsonAnnotation(self):
-        with open('FaceSegmentation/docks/Constant/Formats/JSON/ConstantData.json', 'r') as f:
+        with open('/content/FaceSegmentation/Pipeline/ConstantData.json', 'r') as f:
             coco_data = json.load(f)
 
         image_info = {
             "id": 0,
             "license": 1,
-            "file_name": f"{self.image_path}.jpeg",
+            "file_name": self.image_path,
             "height": self.ImageHeight,
             "width": self.ImageWidth
         }
@@ -45,3 +45,7 @@ class CreateJson:
             json.dump(coco_data, json_file, indent=4)
 
         self.Json = self.Json
+
+    def DemoJson(self):
+        self.Json = 'qwe'
+
