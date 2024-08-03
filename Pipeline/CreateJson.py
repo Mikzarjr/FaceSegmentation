@@ -1,7 +1,7 @@
 from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Tools import GetImageName
 
-
+C
 class CreateJson:
     def __init__(self, image_path, json_name):
         self.image_path = image_path
