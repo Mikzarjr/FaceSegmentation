@@ -8,4 +8,4 @@ roboflow
 supervision
 tqdm
 pycocotools
-skimage
+scikit-image
