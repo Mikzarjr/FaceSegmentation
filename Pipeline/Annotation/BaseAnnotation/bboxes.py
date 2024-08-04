@@ -16,7 +16,7 @@ class bboxes():
 
         for cntr in contours:
             x, y, w, h = cv2.boundingRect(cntr)
-            if w * h > 400:
+            if w * h > 1500:
                 self.BBoxes.append([x, y, w, h])
 
         return self.BBoxes

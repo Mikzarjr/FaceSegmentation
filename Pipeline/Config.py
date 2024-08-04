@@ -11,7 +11,9 @@ from tqdm import tqdm
 from matplotlib import pyplot as plt
 from pycocotools.coco import COCO
 import json
-
+from skimage import measure
 
 MAIN_DIR = os.getcwd()
 IMGS_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/TestImages")
+COCO_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/Results/COCO")
+YOLO_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/Results/YOLO")

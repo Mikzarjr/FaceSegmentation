@@ -1,3 +1,5 @@
+import os
+
 from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Pipeline.Tools import *
 
@@ -35,6 +37,7 @@ class FaceSeg:
         self.SegmentImage()
         self.SaveMask()
         self.DeleteOtherMasks()
+        self.DeleteNoize()
 
     def SegmentImage(self):
         all_results = []
@@ -160,11 +163,6 @@ class FaceSeg:
 
         return image
 
-    # def GetImageName(self):
-    #     image_name = os.path.basename(self.image_path)
-    #     name, _ = os.path.splitext(image_name)
-    #     return name
-
     def SaveMask(self):
         img = cv2.imread(f'{self.SPLIT_MASK_DIR}/face_WI.jpg')
         combined_mask = np.zeros_like(img)
@@ -195,3 +193,20 @@ class FaceSeg:
                 new_file_path = os.path.join(self.SPLIT_MASK_DIR, new_file_name)
                 if os.path.isfile(old_file_path):
                     os.rename(old_file_path, new_file_path)
+
+    def DeleteNoize(self):
+        for image in os.listdir(self.SPLIT_MASK_DIR):
+            image_path = f"{self.SPLIT_MASK_DIR}/{image}"
+            img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+            _, binary_mask = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY)
+
+            kernel = np.ones((3, 3), np.uint8)
+            cleaned_mask = cv2.morphologyEx(binary_mask, cv2.MORPH_OPEN, kernel, iterations=2)
+            num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(cleaned_mask, connectivity=8)
+
+            min_size = 500
+            for i in range(1, num_labels):
+                if stats[i, cv2.CC_STAT_AREA] < min_size:
+                    cleaned_mask[labels == i] = 0
+
+            Image.fromarray(cleaned_mask).save(image_path)
