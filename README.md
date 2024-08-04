@@ -52,7 +52,8 @@ pip install -e setup.py
 # 🚀 Quickstart
 
 # 📑 Workthrough
-## `CLIP-DINO-SAM` segmentation 🎨
+`CLIP-DINO-SAM` combination is a **Huge** module that works relatively **not quickly** as it requires relatively **Big** ammounts of GPU
+## Segmentation with CLIP-DINO-SAM only 🎨
 
 ### Import dependencies
 ```python
