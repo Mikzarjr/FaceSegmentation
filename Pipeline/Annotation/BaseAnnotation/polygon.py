@@ -24,7 +24,7 @@ class polygons():
 
         for contour in contours:
             contour = contour - 1
-            contour = close_contour(contour)
+            contour = self.close_contour(contour)
             contour = measure.approximate_polygon(contour, tolerance)
             if len(contour) < 10:
                 continue

@@ -15,21 +15,46 @@ class CreateJson:
         self.Json = None
         self.ImageHeight, self.ImageWidth = GetImageDimensions(original_image_path)
 
-    def CheckJson(self):
+    def BaseDrawAnnotatoins(self):
+        coco = COCO(f'{MAIN_DIR}/{self.Json}.json')
+        img_dir = self.original_image_dir
+        image_id = 0
+        img = coco.imgs[image_id]
+        image = np.array(Image.open(os.path.join(img_dir, img['file_name'])))
+        cat_ids = coco.getCatIds()
+        return coco, img, image, cat_ids
+
+    def DrawAnnotations(self, task, coco, img, image, cat_ids, cat_id):
+        if task == "all":
+            anns_ids = coco.getAnnIds(imgIds=img['id'], catIds=cat_ids, iscrowd=None)
+            category_name = "Annotations"
+        elif task == "byclass":
+            anns_ids = coco.getAnnIds(imgIds=img['id'], catIds=[cat_id], iscrowd=None)
+            category_name = coco.loadCats(cat_id)[0]['name']
+        anns = coco.loadAnns(anns_ids)
+        plt.figure(figsize=(10, 10))
+        plt.imshow(image, interpolation='nearest')
+        coco.showAnns(anns)
+        plt.title(f"{category_name}")
+        plt.axis('off')
+        plt.show()
+
+    def VisualizeAll(self):
         if self.Json is None:
             print(f"There is no json annotation for '{self.original_image_name}'")
             print("Run 'CreateJsonAnnotation' to create one")
         else:
-            coco = COCO(f'{MAIN_DIR}/{self.Json}.json')
-            img_dir = self.original_image_dir
-            image_id = 0
-            img = coco.imgs[image_id]
-            image = np.array(Image.open(os.path.join(img_dir, img['file_name'])))
-            plt.imshow(image, interpolation='nearest')
-            cat_ids = coco.getCatIds()
-            anns_ids = coco.getAnnIds(imgIds=img['id'], catIds=cat_ids, iscrowd=None)
-            anns = coco.loadAnns(anns_ids)
-            coco.showAnns(anns)
+            coco, img, image, cat_ids = self.BaseDrawAnnotatoins()
+            self.DrawAnnotations("all", coco, img, image, cat_ids, _)
+
+    def VisualizeByClass(self):
+        if self.Json is None:
+            print(f"There is no json annotation for '{self.original_image_name}'")
+            print("Run 'CreateJsonAnnotation' to create one")
+        else:
+            coco, img, image, cat_ids = self.BaseDrawAnnotatoins()
+            for cat_id in cat_ids:
+                self.DrawAnnotations("byclass", coco, img, image, _, cat_id)
 
     def CreateJsonAnnotation(self):
         with open(f'{MAIN_DIR}/FaceSegmentation/docks/Constant/Formats/JSON/ConstantData.json', 'r') as f:
@@ -61,6 +86,7 @@ class CreateJson:
         self.Json = self.Json
 
     def Annotate(self, ClassName, counter):
+        print(ClassName)
         Annotations = []
 
         id = counter
@@ -68,7 +94,7 @@ class CreateJson:
         CLASSES = ['face', 'ears', 'eyebrows', 'eyes', 'glasses', 'nose', 'hair', 'mouth', 'neck']
         category_id = CLASSES.index(ClassName)
 
-        mask_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
+        mask_path = f"/content/segmentation/{self.original_image_name}/split_masks/{ClassName}.jpg"
         bbox, area = self.bbox(mask_path)
         plgns = self.polygon(mask_path)
         l = len(bbox)
@@ -93,10 +119,10 @@ class CreateJson:
         return bbs, areas
 
     def polygon(self, mask_path):
+        print(0)
         P = polygons(mask_path, self.original_image_path)
         plgns = P.binary_mask_to_polygon()
         return plgns
 
     def DemoJson(self):
         self.Json = 'qwe'
-
