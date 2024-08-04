@@ -45,15 +45,14 @@ class CreateJson:
         coco_data["images"] = [image_info]
 
         folder = os.listdir(self.mask_dir)
+        ccc = 0
         for counter in range(len(folder)):
             file_path = folder[counter]
             ClassName = GetImageName(file_path)
-            annotations = self.Annotate(ClassName, counter)
-            if len(annotations) == 1:
-                coco_data["annotations"] += annotations
-            elif len(annotations) > 1:
-                for i in range(len(annotations)):
-                    coco_data["annotations"] += [annotations[i]]
+            annotations, l = self.Annotate(ClassName, ccc)
+            ccc += l
+            for i in range(len(annotations)):
+                coco_data["annotations"] += [annotations[i]]
 
         self.Json = "coco_annotations"
         with open(f"{self.Json}.json", "w") as json_file:
@@ -71,20 +70,21 @@ class CreateJson:
 
         mask_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
         bbox, area = self.bbox(mask_path)
-        polygons = self.polygon(mask_path)
-        for i in range(len(bbox)):
+        plgns = self.polygon(mask_path)
+        l = len(bbox)
+        for i in range(l):
             annotation = {
-                "id": id,
+                "id": id + i,
                 "image_id": image_id,
                 "category_id": category_id,
                 "bbox": bbox[i],
                 "area": area[i],
-                "segmentation": polygons[i],
+                "segmentation": [plgns[i]],
                 "iscrowd": 0
             }
             Annotations.append(annotation)
 
-        return Annotations
+        return Annotations, l
 
     def bbox(self, mask_path):
         BB = bboxes(mask_path)
@@ -94,8 +94,8 @@ class CreateJson:
 
     def polygon(self, mask_path):
         P = polygons(mask_path, self.original_image_path)
-        polygons = P.binary_mask_to_polygon()
-        return polygons
+        plgns = P.binary_mask_to_polygon()
+        return plgns
 
     def DemoJson(self):
         self.Json = 'qwe'

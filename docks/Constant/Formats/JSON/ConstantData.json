@@ -23,11 +23,11 @@
     },
     {
       "id": 4,
-      "name": "face"
+      "name": "glasses"
     },
     {
       "id": 5,
-      "name": "glasses"
+      "name": "nose"
     },
     {
       "id": 6,
@@ -40,10 +40,6 @@
     {
       "id": 8,
       "name": "neck"
-    },
-    {
-      "id": 9,
-      "name": "nose"
     }
   ],
   "images": [

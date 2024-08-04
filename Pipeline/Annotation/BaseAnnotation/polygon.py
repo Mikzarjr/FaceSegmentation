@@ -2,10 +2,13 @@ from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Pipeline.Tools import *
 
 
-class polygons:
-    def __init__(self, binary_mask, original_image):
-        self.binary_mask = binary_mask
-        self.original_image = original_image
+class polygons():
+    def __init__(self, binary_mask_path, original_image_path):
+        self.binary_mask_path = binary_mask_path
+        self.original_image_path = original_image_path
+        self.binary_mask = cv2.imread(binary_mask_path, 0)
+        self.original_image = cv2.imread(original_image_path)
+
         self.polygons = []
 
     def close_contour(self, contour):
@@ -13,15 +16,15 @@ class polygons:
             contour = np.vstack((contour, contour[0]))
         return contour
 
-    def binary_mask_to_polygon(self, tolerance=1):
+    def binary_mask_to_polygon(self, tolerance=2):
         polygons = []
-        padded_binary_mask = np.pad(binary_mask, pad_width=1, mode='constant', constant_values=0)
+        padded_binary_mask = np.pad(self.binary_mask, pad_width=1, mode='constant', constant_values=0)
         blurred_binary_mask = cv2.GaussianBlur(padded_binary_mask, (5, 5), 0)
         contours = measure.find_contours(blurred_binary_mask, 10)
 
         for contour in contours:
             contour = contour - 1
-            contour = self.close_contour(contour)
+            contour = close_contour(contour)
             contour = measure.approximate_polygon(contour, tolerance)
             if len(contour) < 10:
                 continue
