@@ -9,7 +9,7 @@ class CreateJson:
         self.original_image_path = original_image_path
         self.original_image_dir = GetImageDir(original_image_path)
         self.original_image_name = GetImageName(original_image_path)
-
+        print(self.original_image_dir)
         self.mask_dir = f"{self.original_image_dir}/split_masks"
 
         self.Json = None
@@ -86,7 +86,6 @@ class CreateJson:
         self.Json = self.Json
 
     def Annotate(self, ClassName, counter):
-        print(ClassName)
         Annotations = []
 
         id = counter
@@ -119,7 +118,6 @@ class CreateJson:
         return bbs, areas
 
     def polygon(self, mask_path):
-        print(0)
         P = polygons(mask_path, self.original_image_path)
         plgns = P.binary_mask_to_polygon()
         return plgns

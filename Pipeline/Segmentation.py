@@ -209,6 +209,4 @@ class FaceSeg:
                 if stats[i, cv2.CC_STAT_AREA] < min_size:
                     cleaned_mask[labels == i] = 0
 
-            sv.plot_image(cleaned_mask)
-
             Image.fromarray(cleaned_mask).save(image_path)
