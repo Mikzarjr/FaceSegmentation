@@ -8,6 +8,10 @@ from PIL import Image
 import os
 import supervision as sv
 from tqdm import tqdm
+from matplotlib import pyplot as plt
+from pycocotools.coco import COCO
+import json
+
 
 MAIN_DIR = os.getcwd()
-IMGS_DIR = os.path.join(MAIN_DIR, "FaceSeg/docks/TestImages")
+IMGS_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/TestImages")

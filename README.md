@@ -30,7 +30,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 </div>
 
 # 📚 Basic Concepts
-
+`CLIP-DINO-SAM` combination is a **Huge** module that works relatively **not quickly** as it requires relatively **Big** ammounts of GPU. So i will show you a detailed workthroug for only two images to save your time on waiting for the results and my time on writing this tutorial. For the most curious ones i will leave a complete pipeline for training on custom face dataset. Enjoy 🎉
 
 
 #
@@ -50,10 +50,15 @@ pip install -e setup.py
 ```
 
 # 🚀 Quickstart
+
+# 📑 Workthrough
+
+## Segmentation with CLIP-DINO-SAM only 🎨
+
 ### Import dependencies
 ```python
-from FaceSeg.Pipeline.Config import *
-from FaceSeg.Pipeline.Segmentation import FaceSeg
+from FaceSegmentation.Pipeline.Config import *
+from FaceSegmentation.Pipeline.Segmentation import FaceSeg
 ```
 
 ### Choose image to test the framework 
@@ -71,6 +76,34 @@ S = FaceSeg(image_path)
 S.Segment()
 ```
 
+## Annotations for training YOLO 📝
+
+### Create COCO.json annotations
+```python
+from FaceSegmentation.Pipeline.Annotator import CreateJson
+```
+```python
+image_path = "/content/segmentation/img1/img1.jpg"
+```
+```python
+A = CreateJson(image_path)
+A.CreateJsonAnnotation()
+A.CheckJson()
+```
+Output will be in `COCO_DIR` named `COCO.json`
+
+### Convert COCO.json annotations to YOLOv8 txt annotatoins
+```python
+from FaceSegmentation.Pipeline.Converter import COCO-to-YOLO
+```
+```python
+json_path = f"{COCO_DIR}/COCO.json"
+```
+```python
+C = ConvertCtY(image_path)
+C.Convert()
+```
+Output will be in `YOLO_DIR` named `YOLO.json`
 
 
 
