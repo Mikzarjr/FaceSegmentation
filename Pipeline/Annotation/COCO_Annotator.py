@@ -1,25 +1,27 @@
 from FaceSegmentation.Pipeline.Annotation.BaseAnnotation.bboxes import *
-# from FaceSegmentation.Pipeline.Annotation.BaseAnnotation.polygon import *
+from FaceSegmentation.Pipeline.Annotation.BaseAnnotation.polygon import *
 from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Pipeline.Tools import *
 
 
 class CreateJson:
-    def __init__(self, image_path):
-        self.image_path = image_path
-        self.image_dir = GetImageDir(image_path)
-        self.image_name = GetImageName(image_path)
-        self.mask_dir = f"{self.image_dir}/split_masks"
+    def __init__(self, original_image_path):
+        self.original_image_path = original_image_path
+        self.original_image_dir = GetImageDir(original_image_path)
+        self.original_image_name = GetImageName(original_image_path)
+
+        self.mask_dir = f"{self.original_image_dir}/split_masks"
+
         self.Json = None
-        self.ImageHeight, self.ImageWidth = GetImageDimensions(image_path)
+        self.ImageHeight, self.ImageWidth = GetImageDimensions(original_image_path)
 
     def CheckJson(self):
         if self.Json is None:
-            print(f"There is no json annotation for '{self.image_name}'")
+            print(f"There is no json annotation for '{self.original_image_name}'")
             print("Run 'CreateJsonAnnotation' to create one")
         else:
             coco = COCO(f'{MAIN_DIR}/{self.Json}.json')
-            img_dir = self.image_dir
+            img_dir = self.original_image_dir
             image_id = 0
             img = coco.imgs[image_id]
             image = np.array(Image.open(os.path.join(img_dir, img['file_name'])))
@@ -36,7 +38,7 @@ class CreateJson:
         image_info = {
             "id": 0,
             "license": 1,
-            "file_name": self.image_path,
+            "file_name": self.original_image_path,
             "height": self.ImageHeight,
             "width": self.ImageWidth
         }
@@ -67,8 +69,9 @@ class CreateJson:
         CLASSES = ['face', 'ears', 'eyebrows', 'eyes', 'glasses', 'nose', 'hair', 'mouth', 'neck']
         category_id = CLASSES.index(ClassName)
 
-        image_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
-        bbox, area = self.bbox(image_path)
+        mask_path = f"/content/segmentation/img1/split_masks/{ClassName}.jpg"
+        bbox, area = self.bbox(mask_path)
+        polygons = self.polygon(mask_path)
         for i in range(len(bbox)):
             annotation = {
                 "id": id,
@@ -76,21 +79,24 @@ class CreateJson:
                 "category_id": category_id,
                 "bbox": bbox[i],
                 "area": area[i],
-                "segmentation": self.polygon(),
+                "segmentation": polygons[i],
                 "iscrowd": 0
             }
             Annotations.append(annotation)
 
         return Annotations
 
-    def bbox(self, image_path):
-        BB = bboxes(image_path)
+    def bbox(self, mask_path):
+        BB = bboxes(mask_path)
         bbs = BB.GetBboxCoords()
         areas = BB.Area()
         return bbs, areas
 
-    def polygon(self):
-        return [[0]]
+    def polygon(self, mask_path):
+        P = polygons(mask_path, self.original_image_path)
+        polygons = P.binary_mask_to_polygon()
+        return polygons
 
     def DemoJson(self):
         self.Json = 'qwe'
+

@@ -161,8 +161,8 @@ class FaceSeg:
         return image
 
     # def GetImageName(self):
-    #     image_name = os.path.basename(self.image_path)
-    #     name, _ = os.path.splitext(image_name)
+    #     original_image_name = os.path.basename(self.original_image_path)
+    #     name, _ = os.path.splitext(original_image_name)
     #     return name
 
     def SaveMask(self):
