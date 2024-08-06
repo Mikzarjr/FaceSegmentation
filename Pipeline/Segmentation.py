@@ -1,11 +1,15 @@
-import os
-
 from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Pipeline.Tools import *
 
 
 class FaceSeg:
-    def __init__(self, image_path):
+    def __init__(self, image_path: str):
+        """
+        TODO: No need do save any masks until the final masks got
+
+        :param image_path: Path to image desired for segmentation
+        :return: Combined mask in COMBINED_MASK_DIR, All masks for each class separately in SPLIT_MASK_DIR
+        """
         self.image_path = image_path
         self.SEG_DIR = f'{MAIN_DIR}/segmentation'
         self.image_name = GetImageName(image_path)
@@ -24,7 +28,19 @@ class FaceSeg:
                        [165, 42, 42],
                        [191, 255, 0]]
 
-    def MakeDirs(self):
+    def Segment(self):
+        """
+
+        :rtype: ???
+        """
+        self.Prepare()
+        self.SegmentImage()
+        self.RemoveIntersections()
+        self.CombinedMask()
+        self.DeleteOtherMasks()
+        self.DeleteNoize()
+
+    def Prepare(self):
         os.makedirs(self.SEG_DIR, exist_ok=True)
         os.makedirs(self.WORK_DIR, exist_ok=True)
         os.makedirs(self.SPLIT_MASK_DIR, exist_ok=True)
@@ -32,14 +48,13 @@ class FaceSeg:
         img = cv2.imread(self.image_path)
         Image.fromarray(img).save(f"{self.WORK_DIR}/{self.image_name}.jpg")
 
-    def Segment(self):
-        self.MakeDirs()
-        self.SegmentImage()
-        self.SaveMask()
-        self.DeleteOtherMasks()
-        self.DeleteNoize()
+    def SegmentImage(self) -> None:
+        """
+        TODO: 1 check mask type
+        TODO: return dict[str:class, list[int]:mask]
 
-    def SegmentImage(self):
+        :rtype: None
+        """
         all_results = []
         image = cv2.imread(self.image_path)
 
@@ -59,100 +74,33 @@ class FaceSeg:
 
             annotator = sv.MaskAnnotator()
             mask = annotator.annotate(scene=np.zeros_like(image), detections=results)
+            # print(type(mask))
             Image.fromarray(mask).save(f"{self.SPLIT_MASK_DIR}/{class_name}.jpg")
 
-        for i in self.CLASSES:
-            if i == 'face':
-                FACE = self.FACE_WithoutIntersections()
-                Image.fromarray(FACE).save(f"{self.SPLIT_MASK_DIR}/face_WI.jpg")
-            elif i == 'eyes':
-                EYES = self.EYES_WithoutIntersections()
-                Image.fromarray(EYES).save(f"{self.SPLIT_MASK_DIR}/eyes_WI.jpg")
-            elif i == 'nose':
-                NOSE = self.NOSE_WithoutIntersections()
-                Image.fromarray(NOSE).save(f"{self.SPLIT_MASK_DIR}/nose_WI.jpg")
-            elif i == 'glasses':
-                GLASSES = self.GLASSES_WithoutIntersections()
-                Image.fromarray(GLASSES).save(f"{self.SPLIT_MASK_DIR}/glasses_WI.jpg")
-            elif i == 'hair':
-                HAIR = self.HAIR_WithoutIntersections()
-                Image.fromarray(HAIR).save(f"{self.SPLIT_MASK_DIR}/hair_WI.jpg")
-            else:
-                CLASS = self.REST_WithoutIntersection(i)
-                Image.fromarray(CLASS).save(f"{self.SPLIT_MASK_DIR}/{i}_WI.jpg")
+    def RemoveIntersections(self) -> None:
+        """
+        :Description:
+        Method {RemoveIntersections} removes all intersections of all masks,
+        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
 
-    def FACE_WithoutIntersections(self):
-        FACE = cv2.imread(f"{self.SPLIT_MASK_DIR}/face.jpg", cv2.IMREAD_GRAYSCALE)
-
-        for i in self.CLASSES:
-            if i != 'face' and i != 'hair':
-                instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/{i}.jpg", cv2.IMREAD_GRAYSCALE)
-                intersection = cv2.bitwise_and(FACE, instance)
-                FACE = cv2.bitwise_and(FACE, cv2.bitwise_not(intersection))
-        return FACE
-
-    def HAIR_WithoutIntersections(self):
-        HAIR = cv2.imread(f"{self.SPLIT_MASK_DIR}/hair.jpg", cv2.IMREAD_GRAYSCALE)
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/face.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(HAIR, instance)
-        HAIR = cv2.bitwise_and(HAIR, cv2.bitwise_not(intersection))
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/neck.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(HAIR, instance)
-        HAIR = cv2.bitwise_and(HAIR, cv2.bitwise_not(intersection))
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/ears.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(HAIR, instance)
-        HAIR = cv2.bitwise_and(HAIR, cv2.bitwise_not(intersection))
-        return HAIR
-
-    def EYES_WithoutIntersections(self):
-        EYES = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyes.jpg", cv2.IMREAD_GRAYSCALE)
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/nose.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(EYES, instance)
-        EYES = cv2.bitwise_and(EYES, cv2.bitwise_not(intersection))
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyebrows.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(EYES, instance)
-        EYES = cv2.bitwise_and(EYES, cv2.bitwise_not(intersection))
-        return EYES
-
-    def GLASSES_WithoutIntersections(self):
-        GLASSES = cv2.imread(f"{self.SPLIT_MASK_DIR}/glasses.jpg", cv2.IMREAD_GRAYSCALE)
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyes.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(GLASSES, instance)
-        GLASSES = cv2.bitwise_and(GLASSES, cv2.bitwise_not(intersection))
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyebrows.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(GLASSES, instance)
-        GLASSES = cv2.bitwise_and(GLASSES, cv2.bitwise_not(intersection))
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/nose.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(GLASSES, instance)
-        GLASSES = cv2.bitwise_and(GLASSES, cv2.bitwise_not(intersection))
-        return GLASSES
-
-    def NOSE_WithoutIntersections(self):
-        NOSE = cv2.imread(f"{self.SPLIT_MASK_DIR}/nose.jpg", cv2.IMREAD_GRAYSCALE)
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/mouth.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(NOSE, instance)
-        NOSE = cv2.bitwise_and(NOSE, cv2.bitwise_not(intersection))
-
-        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/eyebrows.jpg", cv2.IMREAD_GRAYSCALE)
-        intersection = cv2.bitwise_and(NOSE, instance)
-        NOSE = cv2.bitwise_and(NOSE, cv2.bitwise_not(intersection))
-        return NOSE
-
-    def REST_WithoutIntersection(self, CLASS):
-        CLASS = cv2.imread(f"{self.SPLIT_MASK_DIR}/{CLASS}.jpg", cv2.IMREAD_GRAYSCALE)
-        return CLASS
+        :rtype: None
+        """
+        RI = RemoveIntersections(self.SPLIT_MASK_DIR, self.CLASSES)
+        RI.RemoveIntersections()
 
     @staticmethod
-    def Paint(image_path, color):
+    def Paint(image_path: str, color: list):
+        """
+        :Description:
+        Method {RemoveIntersections} removes all intersections of all masks,
+        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
+
+
+        :param image_path: path to
+        :param color:
+        :rtype: ???
+        :return: ???
+        """
         image = cv2.imread(image_path, cv2.IMREAD_COLOR)
 
         mask = np.any(image >= 50, axis=2)
@@ -163,7 +111,7 @@ class FaceSeg:
 
         return image
 
-    def SaveMask(self):
+    def CombinedMask(self):
         img = cv2.imread(f'{self.SPLIT_MASK_DIR}/face_WI.jpg')
         combined_mask = np.zeros_like(img)
 
@@ -176,10 +124,6 @@ class FaceSeg:
         annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{self.image_name}.jpg")
 
     def DeleteOtherMasks(self):
-        """
-        Deletes all files in the SPLIT_MASK_DIR that do not have "WI" in their name.
-        Renames files containing "WI" by removing "WI" from their names.
-        """
         for file in os.listdir(self.SPLIT_MASK_DIR):
             if "WI" not in file:
                 file_path = os.path.join(self.SPLIT_MASK_DIR, file)
@@ -196,12 +140,17 @@ class FaceSeg:
 
     def DeleteNoize(self):
         for image in os.listdir(self.SPLIT_MASK_DIR):
+            if image.startswith('.'):
+                print(f"Skipping hidden file or directory: {image}")
+                continue
+                
             image_path = f"{self.SPLIT_MASK_DIR}/{image}"
             img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+
             _, binary_mask = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY)
 
-            kernel = np.ones((3, 3), np.uint8)
-            cleaned_mask = cv2.morphologyEx(binary_mask, cv2.MORPH_OPEN, kernel, iterations=2)
+            kernel = np.ones((5, 5), np.uint8)
+            cleaned_mask = cv2.morphologyEx(binary_mask, cv2.MORPH_OPEN, kernel, iterations=3)
             num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(cleaned_mask, connectivity=8)
 
             min_size = 500
@@ -210,3 +159,98 @@ class FaceSeg:
                     cleaned_mask[labels == i] = 0
 
             Image.fromarray(cleaned_mask).save(image_path)
+
+
+class RemoveIntersections:
+    def __init__(self, SPLIT_MASK_DIR: str, CLASSES: list):
+        """
+        TODO: 1 check all types
+        TODO: 2 check returns
+
+        :Description:
+        Class :RemoveIntersections: removes all intersections of all masks,
+        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
+
+        :param SPLIT_MASK_DIR: Directory where all separate masks are located
+        :param CLASSES: List of face parts (from FaceSeg self.CLASSES)
+        :rtype: ???
+        :return ???
+        """
+        self.SPLIT_MASK_DIR = SPLIT_MASK_DIR
+        self.CLASSES = CLASSES
+
+    def RemoveIntersections(self):
+        """
+        :Description:
+        Method {RemoveIntersections} removes all intersections of all masks,
+        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
+
+        :rtype: ???
+        :return: ???
+        """
+        intersecting_classes: dict[str, list[str]] = \
+            {
+                "eyes": ["eyebrows", "nose"],
+                "face": ["ears", "eyebrows", "eyes", "glasses", "mouth", "neck", "nose"],
+                "glasses": ["eyebrows", "eyes", "nose"],
+                "hair": ["ears", "face", "neck"],
+                "nose": ["eyebrows", "mouth"]
+            }
+
+        for curr_class in self.CLASSES:
+            if curr_class in intersecting_classes:
+                self.PerClassMain(curr_class, intersecting_classes[curr_class])
+                # curr_mask = self.PerClassMain(curr_class, intersecting_classes[curr_class])
+                # return curr_mask
+            else:
+                self.AllRest(curr_class)
+                # curr_mask = self.AllRest(curr_class)
+                # return curr_mask
+
+    def PerClassBase(self, main_part: object, sub_part: str):
+        """
+        :Description:
+        Method {PerClassBase} removes intersection of main_part with <sub_part> from <main_part>
+
+        :Inheritance: Method {PerClassBase} is sub-method of {PerClassMain}
+        :param main_part: Mask that is being modified
+        :param sub_part: Name of class that is intersecting with <main_part>
+        :rtype main_part_wi: ???
+        :return main_part_wi: ???
+        """
+        instance = cv2.imread(f"{self.SPLIT_MASK_DIR}/{sub_part}.jpg", cv2.IMREAD_GRAYSCALE)
+        intersection = cv2.bitwise_and(main_part, instance)
+        main_part_wi = cv2.bitwise_and(main_part, cv2.bitwise_not(intersection))
+        return main_part_wi
+
+    def PerClassMain(self, current_class: str, other_classes: list):
+        """
+        :Description:
+        Method {PerClassMain} removes all intersections of all masks from
+        <other_classes> with <current_class>, converts new masks to grayscale and saves
+        as SPLIT_MASK_DIR/current_class.jpg
+
+        :keyword class: Face part (from FaceSeg self.CLASSES)
+        :param current_class: Name of class that is being modified
+        :param other_classes: Names of all classes that are intersecting with <current_class>
+        :rtype: ???
+        :return: ???
+        """
+        curr_mask = cv2.imread(f"{self.SPLIT_MASK_DIR}/{current_class}.jpg", cv2.IMREAD_GRAYSCALE)
+        for class_name in other_classes:
+            curr_mask = self.PerClassBase(curr_mask, class_name)
+        Image.fromarray(curr_mask).save(f"{self.SPLIT_MASK_DIR}/{current_class}_WI.jpg")
+        # return curr_mask
+
+    def AllRest(self, current_class: str):
+        """
+        :Description:
+        Method {AllRest} converts <current_class> to grayscale and saves as SPLIT_MASK_DIR/current_class.jpg
+
+        :param current_class: Name of class that is being converted to grayscale
+        :rtype: ???
+        :return: ???
+        """
+        curr_mask = cv2.imread(f"{self.SPLIT_MASK_DIR}/{current_class}.jpg", cv2.IMREAD_GRAYSCALE)
+        Image.fromarray(curr_mask).save(f"{self.SPLIT_MASK_DIR}/{curr_mask}_WI.jpg")
+        # return curr_mask
