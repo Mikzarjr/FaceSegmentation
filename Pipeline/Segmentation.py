@@ -6,8 +6,10 @@ from FaceSegmentation.Pipeline.Tools import *
 class FaceSeg:
     def __init__(self, image_path: str):
         """
-        TODO: Finish all dockstrings
-        
+        TODO: 1 Finish all dock-strings
+        TODO: 2 Rework DeleteNoize() - should accept self.MASKS
+        TODO: 3 Naming
+
         :param image_path: Path to image desired for segmentation
         :return: Combined mask in COMBINED_MASK_DIR, All masks for each class separately in SPLIT_MASK_DIR
         """
@@ -42,6 +44,7 @@ class FaceSeg:
         self.Prepare()
         self.SegmentImage()
         self.RemoveIntersections()
+        self.SaveSplitMasks()
         self.DeleteNoize()
         self.CombinedMask()
 
@@ -88,10 +91,10 @@ class FaceSeg:
 
         :rtype: None
         """
-        RI = RemoveIntersections(self.SPLIT_MASK_DIR, self.CLASSES, self.MASKS)
-        self.MASKS = RI.RemoveIntersections
+        RI = RemoveIntersections(self.CLASSES, self.MASKS)
+        self.MASKS = RI.MainRemoveIntersections
 
-    def SaveMasks(self):
+    def SaveSplitMasks(self):
         for i in self.MASKS:
             Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}_new.jpg")
 
@@ -193,7 +196,7 @@ class RemoveIntersections:
         self.MASKS = MASKS
 
     @property
-    def RemoveIntersections(self) -> dict:
+    def MainRemoveIntersections(self) -> dict:
         """
         :Description:
         Property {RemoveIntersections} removes all intersections of all masks and
