@@ -7,7 +7,7 @@ class FaceSeg:
     def __init__(self, image_path: str):
         """
         TODO: Finish all dockstrings
-
+        
         :param image_path: Path to image desired for segmentation
         :return: Combined mask in COMBINED_MASK_DIR, All masks for each class separately in SPLIT_MASK_DIR
         """
@@ -42,9 +42,8 @@ class FaceSeg:
         self.Prepare()
         self.SegmentImage()
         self.RemoveIntersections()
-        self.CombinedMask()
-        self.DeleteOtherMasks()
         self.DeleteNoize()
+        self.CombinedMask()
 
     def Prepare(self):
         os.makedirs(self.SEG_DIR, exist_ok=True)
