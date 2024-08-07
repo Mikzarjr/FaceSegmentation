@@ -56,9 +56,6 @@ class FaceSeg:
 
     def SegmentImage(self):
         """
-        TODO: 1 check mask type
-        TODO: return dict[str:class, list[int]:mask]
-
         :rtype: ???
         """
 
@@ -93,7 +90,7 @@ class FaceSeg:
         :rtype: None
         """
         RI = RemoveIntersections(self.SPLIT_MASK_DIR, self.CLASSES, self.MASKS)
-        self.MASKS = RI.RemoveIntersections()
+        self.MASKS = RI.RemoveIntersections
 
     def SaveMasks(self):
         for i in self.MASKS:
@@ -106,8 +103,7 @@ class FaceSeg:
         Method {RemoveIntersections} removes all intersections of all masks,
         converts new masks to grayscale and saves them in SPLIT_MASK_DIR
 
-
-        :param image_path: path to
+        :param image_arr:
         :param color:
         :rtype: ???
         :return: ???
@@ -182,32 +178,30 @@ class FaceSeg:
 
 
 class RemoveIntersections:
-    def __init__(self, SPLIT_MASK_DIR: str, CLASSES: list, MASKS: dict):
+    def __init__(self, CLASSES: list, MASKS: dict) -> None:
         """
-        TODO: 1 check all types
-        TODO: 2 check returns
-
         :Description:
         Class :RemoveIntersections: removes all intersections of all masks,
         converts new masks to grayscale and saves them in SPLIT_MASK_DIR
 
-        :param SPLIT_MASK_DIR: Directory where all separate masks are located
-        :param CLASSES: List of face parts (from FaceSeg self.CLASSES)
-        :rtype: ???
-        :return ???
+        :param CLASSES: All classes (face parts from FaceSeg self.CLASSES)
+        :type CLASSES: list
+        :param MASKS: Dictionary with all masks class-wise
+        :type MASKS: dict
+        :rtype: None
         """
-        self.SPLIT_MASK_DIR = SPLIT_MASK_DIR
         self.CLASSES = CLASSES
         self.MASKS = MASKS
 
-    def RemoveIntersections(self):
+    @property
+    def RemoveIntersections(self) -> dict:
         """
         :Description:
-        Method {RemoveIntersections} removes all intersections of all masks,
-        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
+        Property {RemoveIntersections} removes all intersections of all masks and
+        converts new masks to cv2.GRAY saving them to self.MASKS
 
-        :rtype: ???
-        :return: ???
+        :rtype: dict
+        :return: Dictionary with all cleaned masks class-wise
         """
         intersecting_classes: dict[str, list[str]] = \
             {
@@ -226,25 +220,27 @@ class RemoveIntersections:
 
         return self.MASKS
 
-    def PerClassBase(self, main_part: object, sub_part: str):
+    def PerClassBase(self, main_part: np.ndarray, sub_part: str) -> np.ndarray:
         """
         :Description:
         Method {PerClassBase} removes intersection of main_part with <sub_part> from <main_part>
 
         :Inheritance: Method {PerClassBase} is sub-method of {PerClassMain}
         :param main_part: Mask that is being modified
+        :type main_part: np.ndarray
         :param sub_part: Name of class that is intersecting with <main_part>
-        :rtype main_part_wi: ???
-        :return main_part_wi: ???
+        :type sub_part: np.ndarray
+        :rtype: np.ndarray
+        :return: main_part class without intersection with sub_part
         """
         instance = self.MASKS[sub_part]
-        instance = self.CheckChannels(instance)
+        instance = self.ConvertImageToGRAY(instance)
 
         intersection = cv2.bitwise_and(main_part, instance)
         main_part_wi = cv2.bitwise_and(main_part, cv2.bitwise_not(intersection))
         return main_part_wi
 
-    def PerClassMain(self, current_class: str, other_classes: list):
+    def PerClassMain(self, current_class: str, other_classes: list) -> np.ndarray:
         """
         :Description:
         Method {PerClassMain} removes all intersections of all masks from
@@ -252,42 +248,73 @@ class RemoveIntersections:
         as SPLIT_MASK_DIR/current_class.jpg
 
         :keyword class: Face part (from FaceSeg self.CLASSES)
+
         :param current_class: Name of class that is being modified
+        :type current_class: str
         :param other_classes: Names of all classes that are intersecting with <current_class>
+        :type other_classes: list
         :rtype: ???
-        :return: ???
+        :return: np.ndarray
         """
         curr_mask = self.MASKS[current_class]
-        curr_mask = self.CheckChannels(curr_mask)
+        curr_mask = self.ConvertImageToGRAY(curr_mask)
 
         for class_name in other_classes:
             curr_mask = self.PerClassBase(curr_mask, class_name)
 
         return curr_mask
 
-    def AllRest(self, current_class: str):
+    def AllRest(self, current_class: str) -> np.ndarray:
         """
         :Description:
-        Method {AllRest} converts <current_class> to grayscale and saves as SPLIT_MASK_DIR/current_class.jpg
+        Method {AllRest} converts <current_class> to cv2.GRAY format
 
-        :param current_class: Name of class that is being converted to grayscale
-        :rtype: ???
-        :return: ???
+        :param current_class: Name of class that is converted to grayscale
+        :type current_class: str
+        :rtype: np.ndarray
+        :return: current_class in cv2.GRAY format
         """
         curr_mask = self.MASKS[current_class]
-        curr_mask = self.CheckChannels(curr_mask)
+        curr_mask = self.ConvertImageToGRAY(curr_mask)
 
         return curr_mask
 
-    def CheckChannels(self, instance):
+    @staticmethod
+    def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
         """
-        Ensures that the image is in grayscale format.
+        :Description:
+        StaticMethod {ConvertImageToGRAY} converts the image in cv2.GRAY format.
+
+        :param image: Original image
+        :type image: np.ndarray
+        :rtype: np.ndarray
+        :return: Image in cv2.GRAY
         """
-        if instance is None:
-            raise ValueError("The image instance is None.")
-        if len(instance.shape) == 3:
-            return cv2.cvtColor(instance, cv2.COLOR_BGR2GRAY)
-        elif len(instance.shape) == 2:
-            return instance
+        if image is None:
+            raise ValueError("The image is None.")
+        if len(image.shape) == 3:
+            return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        elif len(image.shape) == 2:
+            return image
+        else:
+            raise ValueError("Invalid image format.")
+
+    @staticmethod
+    def ConvertImageToBGR(image: np.ndarray) -> np.ndarray:
+        """
+        :Description:
+        StaticMethod {ConvertImageToBGR} converts the image in cv2.BGR format.
+
+        :param image: Original image
+        :type image: np.ndarray
+        :rtype: np.ndarray
+        :return: Image in cv2.BGR
+        """
+        if image is None:
+            raise ValueError("The image is None.")
+        if len(image.shape) == 3:
+            return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+        elif len(image.shape) == 2:
+            return image
         else:
             raise ValueError("Invalid image format.")
