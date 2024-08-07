@@ -6,7 +6,7 @@ from FaceSegmentation.Pipeline.Tools import *
 class FaceSeg:
     def __init__(self, image_path: str):
         """
-        TODO: No need do save any masks until the final masks got
+        TODO: Finish all dockstrings
 
         :param image_path: Path to image desired for segmentation
         :return: Combined mask in COMBINED_MASK_DIR, All masks for each class separately in SPLIT_MASK_DIR
