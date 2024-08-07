@@ -42,9 +42,8 @@ class FaceSeg:
         self.Prepare()
         self.SegmentImage()
         self.RemoveIntersections()
-        self.CombinedMask()
-        self.DeleteOtherMasks()
         self.DeleteNoize()
+        self.CombinedMask()
 
     def Prepare(self):
         os.makedirs(self.SEG_DIR, exist_ok=True)
