@@ -1,4 +1,3 @@
-import numpy as np
 from FaceSegmentation.Pipeline.Config import *
 from FaceSegmentation.Pipeline.Tools import *
 
