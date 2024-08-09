@@ -41,11 +41,11 @@ class FaceSeg:
 
         :rtype: ???
         """
-        self.Prepare()
+        # self.Prepare()
         self.SegmentImage()
         self.RemoveIntersections()
-        self.SaveSplitMasks()
         self.DeleteNoize()
+        self.SaveSplitMasks()
         self.CombinedMask()
 
     def Prepare(self):
@@ -61,7 +61,6 @@ class FaceSeg:
         :rtype: ???
         """
 
-        all_results = []
         image = cv2.imread(self.image_path)
 
         for i, class_name in enumerate(self.CLASSES):
@@ -76,7 +75,6 @@ class FaceSeg:
             )
 
             results = MODEL.predict(self.image_path)
-            all_results.append(results)
 
             annotator = sv.MaskAnnotator()
             mask = annotator.annotate(scene=np.zeros_like(image), detections=results)
@@ -96,7 +94,7 @@ class FaceSeg:
 
     def SaveSplitMasks(self):
         for i in self.MASKS:
-            Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}_new.jpg")
+            Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}.jpg")
 
     @staticmethod
     def Paint(image_arr: np.ndarray, color: list):
@@ -125,17 +123,12 @@ class FaceSeg:
 
     def CombinedMask(self):
         img = self.MASKS['face']
-        print("shapes:\n", img.shape)
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-        print(img.shape)
         combined_mask = np.zeros_like(img)
-        print(combined_mask.shape)
 
         for i in self.MASKS:
             mask = self.MASKS[i]
-            print("shape of mask before coloring", mask.shape)
             mask = self.Paint(mask, self.COLORS[i])
-            print("shape of mask after coloring", mask.shape)
             combined_mask += mask
 
         annotated_frame_pil = Image.fromarray(combined_mask)
@@ -157,13 +150,10 @@ class FaceSeg:
                     os.rename(old_file_path, new_file_path)
 
     def DeleteNoize(self):
-        for image in os.listdir(self.SPLIT_MASK_DIR):
-            if image.startswith('.'):
-                print(f"Skipping hidden file or directory: {image}")
-                continue
-
-            image_path = f"{self.SPLIT_MASK_DIR}/{image}"
-            img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        for image in self.MASKS:
+            img = self.MASKS[image]
+            if len(img.shape) == 3:
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             _, binary_mask = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY)
 
@@ -176,7 +166,7 @@ class FaceSeg:
                 if stats[i, cv2.CC_STAT_AREA] < min_size:
                     cleaned_mask[labels == i] = 0
 
-            Image.fromarray(cleaned_mask).save(image_path)
+            self.MASKS[image] = cleaned_mask
 
 
 class RemoveIntersections:
