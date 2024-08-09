@@ -44,6 +44,7 @@ class FaceSeg:
         self.SegmentImage()
         self.RemoveIntersections()
         self.DeleteNoize()
+        return self.MASKS
 
     def SaveMasks(self):
         self.Prepare()
@@ -108,8 +109,6 @@ class FaceSeg:
 
         for i in self.MASKS:
             mask = self.MASKS[i]
-            mask = ConvertImageToBGR(mask)
-            
             mask = self.Paint(mask, self.COLORS[i])
             combined_mask += mask
 
@@ -128,10 +127,7 @@ class FaceSeg:
         :rtype: ???
         :return: ???
         """
-        if len(image_arr.shape) == 2:
-            image = cv2.cvtColor(image_arr, cv2.COLOR_GRAY2BGR)
-        else:
-            image = image_arr
+        image = ConvertImageToBGR(image_arr)
 
         mask = np.any(image >= 50, axis=2)
         blacked = np.any(image < 50, axis=2)
@@ -310,9 +306,9 @@ def ConvertImageToBGR(image: np.ndarray) -> np.ndarray:
     """
     if image is None:
         raise ValueError("The image is None.")
-    if len(image.shape) == 3:
+    if len(image.shape) == 2:
         return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-    elif len(image.shape) == 2:
+    elif len(image.shape) == 3:
         return image
     else:
         raise ValueError("Invalid image format.")
