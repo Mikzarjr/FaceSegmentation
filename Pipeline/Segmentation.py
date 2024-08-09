@@ -41,20 +41,21 @@ class FaceSeg:
 
         :rtype: ???
         """
-        # self.Prepare()
         self.SegmentImage()
         self.RemoveIntersections()
         self.DeleteNoize()
+
+    def SaveMasks(self):
+        self.Prepare()
+        self.SaveOriginalImage()
         self.SaveSplitMasks()
-        self.CombinedMask()
+        self.SaveCombinedMask()
 
     def Prepare(self):
         os.makedirs(self.SEG_DIR, exist_ok=True)
         os.makedirs(self.WORK_DIR, exist_ok=True)
         os.makedirs(self.SPLIT_MASK_DIR, exist_ok=True)
         os.makedirs(self.COMBINED_MASK_DIR, exist_ok=True)
-        img = cv2.imread(self.image_path)
-        Image.fromarray(img).save(f"{self.WORK_DIR}/{self.image_name}.jpg")
 
     def SegmentImage(self):
         """
@@ -96,6 +97,23 @@ class FaceSeg:
         for i in self.MASKS:
             Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}.jpg")
 
+    def SaveOriginalImage(self):
+        img = cv2.imread(self.image_path)
+        Image.fromarray(img).save(f"{self.WORK_DIR}/{self.image_name}.jpg")
+
+    def SaveCombinedMask(self):
+        img = self.MASKS['face']
+        img = ConvertImageToBGR(img)
+        combined_mask = np.zeros_like(img)
+
+        for i in self.MASKS:
+            mask = self.MASKS[i]
+            mask = self.Paint(mask, self.COLORS[i])
+            combined_mask += mask
+
+        annotated_frame_pil = Image.fromarray(combined_mask)
+        annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{self.image_name}.jpg")
+
     @staticmethod
     def Paint(image_arr: np.ndarray, color: list):
         """
@@ -121,19 +139,6 @@ class FaceSeg:
 
         return image
 
-    def CombinedMask(self):
-        img = self.MASKS['face']
-        img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-        combined_mask = np.zeros_like(img)
-
-        for i in self.MASKS:
-            mask = self.MASKS[i]
-            mask = self.Paint(mask, self.COLORS[i])
-            combined_mask += mask
-
-        annotated_frame_pil = Image.fromarray(combined_mask)
-        annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{self.image_name}.jpg")
-
     def DeleteOtherMasks(self):
         for file in os.listdir(self.SPLIT_MASK_DIR):
             if "WI" not in file:
@@ -152,8 +157,7 @@ class FaceSeg:
     def DeleteNoize(self):
         for image in self.MASKS:
             img = self.MASKS[image]
-            if len(img.shape) == 3:
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = ConvertImageToGRAY(img)
 
             _, binary_mask = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY)
 
@@ -226,7 +230,7 @@ class RemoveIntersections:
         :return: main_part class without intersection with sub_part
         """
         instance = self.MASKS[sub_part]
-        instance = self.ConvertImageToGRAY(instance)
+        instance = ConvertImageToGRAY(instance)
 
         intersection = cv2.bitwise_and(main_part, instance)
         main_part_wi = cv2.bitwise_and(main_part, cv2.bitwise_not(intersection))
@@ -249,7 +253,7 @@ class RemoveIntersections:
         :return: np.ndarray
         """
         curr_mask = self.MASKS[current_class]
-        curr_mask = self.ConvertImageToGRAY(curr_mask)
+        curr_mask = ConvertImageToGRAY(curr_mask)
 
         for class_name in other_classes:
             curr_mask = self.PerClassBase(curr_mask, class_name)
@@ -267,46 +271,46 @@ class RemoveIntersections:
         :return: current_class in cv2.GRAY format
         """
         curr_mask = self.MASKS[current_class]
-        curr_mask = self.ConvertImageToGRAY(curr_mask)
+        curr_mask = ConvertImageToGRAY(curr_mask)
 
         return curr_mask
 
-    @staticmethod
-    def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
-        """
-        :Description:
-        StaticMethod {ConvertImageToGRAY} converts the image in cv2.GRAY format.
 
-        :param image: Original image
-        :type image: np.ndarray
-        :rtype: np.ndarray
-        :return: Image in cv2.GRAY
-        """
-        if image is None:
-            raise ValueError("The image is None.")
-        if len(image.shape) == 3:
-            return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        elif len(image.shape) == 2:
-            return image
-        else:
-            raise ValueError("Invalid image format.")
+def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
+    """
+    :Description:
+    StaticMethod {ConvertImageToGRAY} converts the image in cv2.GRAY format.
 
-    @staticmethod
-    def ConvertImageToBGR(image: np.ndarray) -> np.ndarray:
-        """
-        :Description:
-        StaticMethod {ConvertImageToBGR} converts the image in cv2.BGR format.
+    :param image: Original image
+    :type image: np.ndarray
+    :rtype: np.ndarray
+    :return: Image in cv2.GRAY
+    """
+    if image is None:
+        raise ValueError("The image is None.")
+    if len(image.shape) == 3:
+        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    elif len(image.shape) == 2:
+        return image
+    else:
+        raise ValueError("Invalid image format.")
 
-        :param image: Original image
-        :type image: np.ndarray
-        :rtype: np.ndarray
-        :return: Image in cv2.BGR
-        """
-        if image is None:
-            raise ValueError("The image is None.")
-        if len(image.shape) == 3:
-            return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-        elif len(image.shape) == 2:
-            return image
-        else:
-            raise ValueError("Invalid image format.")
+
+def ConvertImageToBGR(image: np.ndarray) -> np.ndarray:
+    """
+    :Description:
+    StaticMethod {ConvertImageToBGR} converts the image in cv2.BGR format.
+
+    :param image: Original image
+    :type image: np.ndarray
+    :rtype: np.ndarray
+    :return: Image in cv2.BGR
+    """
+    if image is None:
+        raise ValueError("The image is None.")
+    if len(image.shape) == 3:
+        return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+    elif len(image.shape) == 2:
+        return image
+    else:
+        raise ValueError("Invalid image format.")
