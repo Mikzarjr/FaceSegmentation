@@ -109,6 +109,7 @@ class FaceSeg:
         for i in self.MASKS:
             mask = self.MASKS[i]
             mask = ConvertImageToBGR(mask)
+            
             mask = self.Paint(mask, self.COLORS[i])
             combined_mask += mask
 
