@@ -49,7 +49,7 @@ class FaceSeg:
         TODO: 2 Naming
 
         :param image_path: Path to image desired for segmentation
-        :return: Combined mask in COMBINED_MASK_DIR, All masks for each class separately in SPLIT_MASK_DIR
+        :type image_path: str
         """
         self.image_path = image_path
         self.SEG_DIR = f'{MAIN_DIR}/segmentation'
@@ -74,31 +74,51 @@ class FaceSeg:
         self.MASKS: dict[str, np.ndarray] = {class_name: np.ndarray([], dtype=np.float64) for class_name in
                                              self.CLASSES}
 
-    def Segment(self):
+    @property
+    def Segment(self) -> dict:
         """
+        :Description:
+        Property {Segment} runs the baseline and returns binary segmentation masks
 
-        :rtype: ???
+        :rtype: dict
+        :return: Returns <self.MASKS> dictionary dict[str, np.ndarray] where keys are classes (face
+        areas) and values are respective binary masks
         """
         self.SegmentImage()
         self.RemoveIntersections()
         self.DeleteNoize()
         return self.MASKS
 
-    def SaveMasks(self):
+    def SaveMasks(self) -> None:
+        """
+        :Description:
+        Method {SaveMasks} runs the baseline and returns binary segmentation masks
+
+        :rtype: None
+        """
         self.Prepare()
         self.SaveOriginalImage()
         self.SaveSplitMasks()
         self.SaveCombinedMask()
 
-    def Prepare(self):
+    def Prepare(self) -> None:
+        """
+        :Description:
+        Method {Prepare} creates all needed directories
+
+        :rtype: None
+        """
         os.makedirs(self.SEG_DIR, exist_ok=True)
         os.makedirs(self.WORK_DIR, exist_ok=True)
         os.makedirs(self.SPLIT_MASK_DIR, exist_ok=True)
         os.makedirs(self.COMBINED_MASK_DIR, exist_ok=True)
 
-    def SegmentImage(self):
+    def SegmentImage(self) -> None:
         """
-        :rtype: ???
+        :Description:
+        Method {SegmentImage} creates all needed directories
+
+        :rtype: None
         """
 
         image = cv2.imread(self.image_path)
@@ -132,7 +152,11 @@ class FaceSeg:
         RI = RemoveIntersections(self.CLASSES, self.MASKS)
         self.MASKS = RI.MainRemoveIntersections
 
-    def SaveSplitMasks(self):
+    def SaveSplitMasks(self) -> object:
+        """
+
+        :rtype: object
+        """
         for i in self.MASKS:
             Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}.jpg")
 
@@ -210,13 +234,12 @@ class FaceSeg:
 
 
 class RemoveIntersections:
-    def __init__(self, CLASSES: list, MASKS: dict) -> None:
+    def __init__(self, CLASSES: list, MASKS: dict):
         """
         :param CLASSES: All classes (face parts from FaceSeg self.CLASSES)
         :type CLASSES: list
         :param MASKS: Dictionary with all masks class-wise
         :type MASKS: dict
-        :rtype: None
         """
         self.CLASSES = CLASSES
         self.MASKS = MASKS

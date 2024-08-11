@@ -71,9 +71,10 @@ image_path = f"{IMGS_DIR}/img1.jpeg"
 Main segmentation mask is located in /segmentation/combined_masks
 
 All separate masks are located in /segmentation/split_masks
+
 ```python
 S = FaceSeg(image_path)
-S.Segment()
+S.Segment
 ```
 
 ## Annotations for training YOLO 📝
