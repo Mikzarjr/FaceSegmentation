@@ -173,10 +173,6 @@ class FaceSeg:
 class RemoveIntersections:
     def __init__(self, CLASSES: list, MASKS: dict) -> None:
         """
-        :Description:
-        Class :RemoveIntersections: removes all intersections of all masks,
-        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
-
         :param CLASSES: All classes (face parts from FaceSeg self.CLASSES)
         :type CLASSES: list
         :param MASKS: Dictionary with all masks class-wise
@@ -276,7 +272,7 @@ class RemoveIntersections:
 def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
     """
     :Description:
-    StaticMethod {ConvertImageToGRAY} converts the image in cv2.GRAY format.
+    Function {ConvertImageToGRAY} converts the image in cv2.GRAY format.
 
     :param image: Original image
     :type image: np.ndarray
@@ -296,7 +292,7 @@ def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
 def ConvertImageToBGR(image: np.ndarray) -> np.ndarray:
     """
     :Description:
-    StaticMethod {ConvertImageToBGR} converts the image in cv2.BGR format.
+    Function {ConvertImageToBGR} converts the image in cv2.BGR format.
 
     :param image: Original image
     :type image: np.ndarray
