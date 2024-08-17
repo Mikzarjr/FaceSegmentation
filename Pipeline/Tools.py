@@ -1,4 +1,4 @@
-from FaceSegmentation.Pipeline.Config import *
+from Pipeline.Config import *
 
 
 def GetImageName(image_path):

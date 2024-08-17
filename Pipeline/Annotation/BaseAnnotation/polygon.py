@@ -1,5 +1,5 @@
-from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Pipeline.Tools import *
+from Pipeline.Config import *
+from Pipeline.Tools import *
 
 
 class polygons():

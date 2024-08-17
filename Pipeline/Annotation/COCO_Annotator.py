@@ -1,7 +1,7 @@
-from FaceSegmentation.Pipeline.Annotation.BaseAnnotation.bboxes import *
-from FaceSegmentation.Pipeline.Annotation.BaseAnnotation.polygon import *
-from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Pipeline.Tools import *
+from Pipeline.Annotation.BaseAnnotation.bboxes import *
+from Pipeline.Annotation.BaseAnnotation.polygon import *
+from Pipeline.Config import *
+from Pipeline.Tools import *
 
 
 class CreateJson:
