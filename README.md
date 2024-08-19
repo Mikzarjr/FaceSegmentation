@@ -49,14 +49,14 @@ or
 pip install -e setup.py
 ```
 
-# 🚀 Quickstart
+<# 🚀 Quickstart>
+
+</# 🚀 Quickstart>
 
 # 📑 Workthrough
 
 ## Segmentation with CLIP-DINO-SAM only 🎨
-<details>
-qweqwe
-</details>
+
 ### Import dependencies
 ```python
 from FaceSegmentation.Pipeline.Config import *
