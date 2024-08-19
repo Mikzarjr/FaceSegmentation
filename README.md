@@ -40,8 +40,10 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 git clone https://github.com/Mikzarjr/FaceSegmentation
 ```
 
-### Install requirements
-- _**Python**_:
+### Setup Environment
+-1 __Locate to working directory__:
+
+- ___Python___:
 ```python
 import os
 HOME = os.getcwd()
@@ -49,13 +51,15 @@ os.chdir(os.path.join(HOME, "FaceSegmentation"))
 
 print("Now in", os.getcwd())
 ```
-- _or **Bash**_:
+- _or __Bash___:
 ```bash
 HOME=$(pwd)
 cd "${HOME}/FaceSegmentation"
 
 echo "Now in $(pwd)"
 ```
+
+-2 __Install requirements__:
 
 ```bash
 pip install -r requirements.txt
