@@ -49,9 +49,9 @@ or
 pip install -e setup.py
 ```
 
-<# 🚀 Quickstart>
-
-</# 🚀 Quickstart>
+# 🚀 <Quickstart>
+<Quickstart>
+</Quickstart>
 
 # 📑 Workthrough
 
