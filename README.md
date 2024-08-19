@@ -39,6 +39,9 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 ```bash
 git clone https://github.com/Mikzarjr/FaceSegmentation
 ```
+```markdown
+# 💿 Installation
+```
 
 - ### Locate to working directory
 
