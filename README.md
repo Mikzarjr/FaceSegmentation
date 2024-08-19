@@ -49,7 +49,7 @@ or
 pip install -e setup.py
 ```
 
-# 🚀 <Quickstart>
+# 🚀 qwe <Quickstart>
 qweqweqwe
 </Quickstart>
 
