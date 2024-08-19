@@ -45,21 +45,21 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 
   ___Python___:
   
-    ```python
+  ```python
     import os
     HOME = os.getcwd()
     os.chdir(os.path.join(HOME, "FaceSegmentation"))
     
     print("Now in", os.getcwd())
-    ```
+  ```
   _or __Bash___:
   
-    ```bash
+  ```bash
     HOME=$(pwd)
     cd "${HOME}/FaceSegmentation"
     
     echo "Now in $(pwd)"
-    ```
+  ```
 
 ### Install requirements:
 
