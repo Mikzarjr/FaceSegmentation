@@ -43,7 +43,7 @@ git clone https://github.com/Mikzarjr/FaceSegmentation
 ### Setup Environment
 - #### 1 __Locate to working directory__:
 
-- ___Python___:
+___Python___:
 ```python
 import os
 HOME = os.getcwd()
@@ -51,7 +51,7 @@ os.chdir(os.path.join(HOME, "FaceSegmentation"))
 
 print("Now in", os.getcwd())
 ```
-- _or __Bash___:
+_or __Bash___:
 ```bash
 HOME=$(pwd)
 cd "${HOME}/FaceSegmentation"
