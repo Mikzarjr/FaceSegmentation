@@ -37,16 +37,23 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 # 💿 Installation
 ### Clone repo
 ```bash
-git clone https://github.com/Mikzarjr/Face-Segmentation
+git clone https://github.com/Mikzarjr/FaceSegmentation
 ```
 
 ### Install requirements
-```bash
-pip install -r FaceSeg/requirements.txt
+```python
+import os
+HOME = os.getcwd()
+%cd {HOME}/FaceSegmentation
 ```
 or
 ```bash
-pip install -e setup.py
+HOME=$(pwd)
+cd "${HOME}/FaceSegmentation"
+```
+or
+```bash
+pip install -r requirements.txt
 ```
 
 # 🚀 Quickstart
@@ -57,7 +64,7 @@ pip install -e setup.py
 # 📑 Workthrough
 ## Segmentation with CLIP-DINO-SAM only 🎨
 <details>
-  
+
 ### Import dependencies
 ```python
 from FaceSegmentation.Pipeline.Config import *
