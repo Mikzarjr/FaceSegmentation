@@ -57,6 +57,7 @@ pip install -e setup.py
 # 📑 Workthrough
 ## Segmentation with CLIP-DINO-SAM only 🎨
 <details>
+  
 ### Import dependencies
 ```python
 from FaceSegmentation.Pipeline.Config import *
