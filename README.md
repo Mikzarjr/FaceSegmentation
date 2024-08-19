@@ -49,7 +49,7 @@ os.chdir(os.path.join(HOME, "FaceSegmentation"))
 
 print("Now in", os.getcwd())
 ```
-- __Bash__:
+#### - __Bash__:
 ```bash
 HOME=$(pwd)
 cd "${HOME}/FaceSegmentation"
