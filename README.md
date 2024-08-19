@@ -83,6 +83,7 @@ S.Segment
 
 ## Annotations for training YOLO 📝
 <details>
+  
 ### Create COCO.json annotations
 ```python
 from FaceSegmentation.Pipeline.Annotator import CreateJson
