@@ -45,7 +45,7 @@ Python:
 ```python
 import os
 HOME = os.getcwd()
-%cd {HOME}/FaceSegmentation
+os.chdir(os.path.join(HOME, "FaceSegmentation"))
 print(f"Now in {os.getcwd()})
 ```
 Bash:
