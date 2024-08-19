@@ -40,8 +40,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 git clone https://github.com/Mikzarjr/FaceSegmentation
 ```
 
-### Setup Environment
-- #### 1 __Locate to working directory__:
+### Locate to working directory
 
 ___Python___:
 ```python
@@ -59,7 +58,7 @@ cd "${HOME}/FaceSegmentation"
 echo "Now in $(pwd)"
 ```
 
-- #### 2 __Install requirements__:
+- ### Install requirements:
 
 ```bash
 pip install -r requirements.txt
