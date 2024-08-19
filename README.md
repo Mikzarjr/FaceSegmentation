@@ -30,35 +30,52 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 </div>
 
 # 📚 Basic Concepts
-`CLIP-DINO-SAM` combination is a **Huge** module that works relatively **not quickly** as it requires relatively **Big** ammounts of GPU. So i will show you a detailed workthroug for only two images to save your time on waiting for the results and my time on writing this tutorial. For the most curious ones i will leave a complete pipeline for training on custom face dataset. Enjoy 🎉
+`CLIP-DINO-SAM` combination is a **Huge** module that works relatively **not quickly** as it requires relatively **Big** ammounts of GPU. So i will show you a detailed workthroug for only two images to save your time on waiting for the results and my time on writing this tutorial. For the most curious ones i will leave a complete workthrough for training on custom face dataset. Enjoy 🎉
 
 
 #
 # 💿 Installation
-### Clone repo
-```bash
-git clone https://github.com/Mikzarjr/Face-Segmentation
-```
+- ### Clone repo
+  ```bash
+  git clone https://github.com/Mikzarjr/FaceSegmentation
+  ```
 
-### Install requirements
-```bash
-pip install -r FaceSeg/requirements.txt
-```
-or
-```bash
-pip install -e setup.py
-```
+
+- ### Locate to working directory
+  ___Python___:
+  
+  ```python
+    import os
+    HOME = os.getcwd()
+    os.chdir(os.path.join(HOME, "FaceSegmentation"))
+    
+    print("Now in", os.getcwd())
+  ```
+  _or __Bash___:
+  
+  ```bash
+    HOME=$(pwd)
+    cd "${HOME}/FaceSegmentation"
+    
+    echo "Now in $(pwd)"
+  ```
+
+- ### Install requirements:
+
+  ```bash
+  pip install -r requirements.txt
+  ```
 
 # 🚀 Quickstart
+  
 
 # 📑 Workthrough
-
 ## Segmentation with CLIP-DINO-SAM only 🎨
 
 ### Import dependencies
 ```python
-from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Pipeline.Segmentation import FaceSeg
+from Pipeline.Config import *
+from Pipeline.Segmentation import FaceSeg
 ```
 
 ### Choose image to test the framework 
@@ -67,21 +84,25 @@ sample images are located in FaceSeg/TestImages
 image_path = f"{IMGS_DIR}/img1.jpeg"
 ```
 
-### Run the following cell to get segmentation masks
-Main segmentation mask is located in /segmentation/combined_masks
-
-All separate masks are located in /segmentation/split_masks
+### Get segmentation masks
+- Main segmentation mask is located in /segmentation/combined_masks
+- All separate masks are located in /segmentation/split_masks
 
 ```python
 S = FaceSeg(image_path)
-S.Segment
+Masks = S.Segment
+```
+- If you want to save masks you can run
+```python
+S.SaveMasks()
 ```
 
-## Annotations for training YOLO 📝
 
+## Annotations for training YOLO 📝
+  
 ### Create COCO.json annotations
 ```python
-from FaceSegmentation.Pipeline.Annotator import CreateJson
+from Pipeline.Annotator import CreateJson
 ```
 ```python
 image_path = "/content/segmentation/img1/img1.jpg"
@@ -95,7 +116,7 @@ Output will be in `COCO_DIR` named `COCO.json`
 
 ### Convert COCO.json annotations to YOLOv8 txt annotatoins
 ```python
-from FaceSegmentation.Pipeline.Converter import COCO-to-YOLO
+from Pipeline.Converter import COCO-to-YOLO
 ```
 ```python
 json_path = f"{COCO_DIR}/COCO.json"
@@ -105,7 +126,6 @@ C = ConvertCtY(image_path)
 C.Convert()
 ```
 Output will be in `YOLO_DIR` named `YOLO.json`
-
 
 
 
