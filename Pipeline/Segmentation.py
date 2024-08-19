@@ -1,5 +1,5 @@
-from Pipeline.Config import *
 from Pipeline.Tools import *
+from Pipeline.Config import *
 
 
 def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
@@ -152,10 +152,10 @@ class FaceSeg:
         RI = RemoveIntersections(self.CLASSES, self.MASKS)
         self.MASKS = RI.MainRemoveIntersections
 
-    def SaveSplitMasks(self) -> object:
+    def SaveSplitMasks(self) -> None:
         """
 
-        :rtype: object
+        :rtype: None
         """
         for i in self.MASKS:
             Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}.jpg")
@@ -259,7 +259,7 @@ class RemoveIntersections:
                 "eyes": ["eyebrows", "nose"],
                 "face": ["ears", "eyebrows", "eyes", "glasses", "mouth", "neck", "nose"],
                 "glasses": ["eyebrows", "eyes", "nose"],
-                "hair": ["ears", "face", "neck"],
+                "hair": ["ears", "eyebrows", "eyes", "face", "glasses", "mouth", "neck", "nose"],
                 "nose": ["eyebrows", "mouth"]
             }
 
@@ -329,3 +329,47 @@ class RemoveIntersections:
         curr_mask = ConvertImageToGRAY(curr_mask)
 
         return curr_mask
+
+
+class FaceOnlySeg:
+    def __init__(self, image_path: str, video_path: str):
+        self.video_path = video_path
+        self.image_path = image_path
+        self.CLASSES = ['face']
+        self.COLORS = {
+            'face': [255, 0, 0],
+        }
+        self.MASKS: dict[str, np.ndarray] = {class_name: np.ndarray([], dtype=np.float64) for class_name in
+                                             self.CLASSES}
+
+    def SegmentFace(self):
+        image = cv2.imread(self.image_path)
+
+        MODEL = ComposedDetectionModel(
+            detection_model=GroundedSAM(
+                CaptionOntology({self.CLASSES[0]: self.CLASSES[0]})
+            ),
+            classification_model=CLIP(
+                CaptionOntology({k: k for k in self.CLASSES})
+            )
+        )
+
+        results = MODEL.predict(self.image_path)
+
+        annotator = sv.MaskAnnotator()
+        mask = annotator.annotate(scene=np.zeros_like(image), detections=results)
+
+        self.MASKS[self.CLASSES[0]] = mask
+
+        return self.MASKS
+
+    def ReturnFace(self):
+        image = cv2.imread(self.image_path)
+        mask = ConvertImageToGRAY(self.MASKS[self.CLASSES[0]])
+
+        mask = mask / 255.0
+        mask = cv2.merge([mask, mask, mask])
+        output = image * mask
+        output = np.clip(output, 0, 255).astype(np.uint8)
+
+        return output
