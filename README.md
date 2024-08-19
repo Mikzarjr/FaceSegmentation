@@ -116,7 +116,7 @@ Output will be in `COCO_DIR` named `COCO.json`
 
 ### Convert COCO.json annotations to YOLOv8 txt annotatoins
 ```python
-from Pipeline.Converter import COCO-to-YOLO
+from Pipeline.Converter import COCOtoYOLO
 ```
 ```python
 json_path = f"{COCO_DIR}/COCO.json"
