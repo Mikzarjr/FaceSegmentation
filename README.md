@@ -93,9 +93,9 @@ S = FaceSeg(image_path)
 Masks = S.Segment
 ```
 - If you want to save masks you can run
-  ```python
-  S.SaveMasks()
-  ```
+```python
+S.SaveMasks()
+```
 
 
 ## Annotations for training YOLO 📝
