@@ -71,7 +71,6 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 
 # 📑 Workthrough
 ## Segmentation with CLIP-DINO-SAM only 🎨
-<details>
 
 ### Import dependencies
 ```python
@@ -100,7 +99,6 @@ Masks = S.Segment
 
 
 ## Annotations for training YOLO 📝
-<details>
   
 ### Create COCO.json annotations
 ```python
@@ -128,7 +126,6 @@ C = ConvertCtY(image_path)
 C.Convert()
 ```
 Output will be in `YOLO_DIR` named `YOLO.json`
-</details>
 
 
 
