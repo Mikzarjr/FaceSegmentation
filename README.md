@@ -46,12 +46,14 @@ Python:
 import os
 HOME = os.getcwd()
 os.chdir(os.path.join(HOME, "FaceSegmentation"))
-print(f"Now in {os.getcwd()})
+
+print("Now in", os.getcwd())
 ```
 Bash:
 ```bash
 HOME=$(pwd)
 cd "${HOME}/FaceSegmentation"
+
 echo "Now in $(pwd)"
 ```
 
