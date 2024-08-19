@@ -30,7 +30,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 </div>
 
 # 📚 Basic Concepts
-`CLIP-DINO-SAM` combination is a **Huge** module that works relatively **not quickly** as it requires relatively **Big** ammounts of GPU. So i will show you a detailed workthroug for only two images to save your time on waiting for the results and my time on writing this tutorial. For the most curious ones i will leave a complete pipeline for training on custom face dataset. Enjoy 🎉
+`CLIP-DINO-SAM` combination is a **Huge** module that works relatively **not quickly** as it requires relatively **Big** ammounts of GPU. So i will show you a detailed workthroug for only two images to save your time on waiting for the results and my time on writing this tutorial. For the most curious ones i will leave a complete workthrough for training on custom face dataset. Enjoy 🎉
 
 
 #
