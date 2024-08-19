@@ -67,7 +67,6 @@ Here are example predictions of YOLO model segmenting parts of face after being 
   ```
 
 # 🚀 Quickstart
-<details>
   
 
 # 📑 Workthrough
