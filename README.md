@@ -50,9 +50,9 @@ pip install -e setup.py
 ```
 
 # 🚀 qwe 
-<Quickstart>
-qweqweqwe
-</Quickstart>
+<details>
+  qweqweqwe
+</details>
 
 # 📑 Workthrough
 
