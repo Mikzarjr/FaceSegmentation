@@ -14,6 +14,6 @@ import json
 from skimage import measure
 
 MAIN_DIR = os.getcwd()
-IMGS_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/TestImages")
-COCO_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/Results/COCO")
-YOLO_DIR = os.path.join(MAIN_DIR, "FaceSegmentation/docks/Results/YOLO")
+IMGS_DIR = os.path.join(MAIN_DIR, "docks/TestImages")
+COCO_DIR = os.path.join(MAIN_DIR, "docks/Results/COCO")
+YOLO_DIR = os.path.join(MAIN_DIR, "docks/Results/YOLO")
