@@ -45,13 +45,15 @@ git clone https://github.com/Mikzarjr/FaceSegmentation
 import os
 HOME = os.getcwd()
 %cd {HOME}/FaceSegmentation
+print(f"Now in {os.getcwd()})
 ```
 or
 ```bash
 HOME=$(pwd)
 cd "${HOME}/FaceSegmentation"
+echo "Now in $(pwd)"
 ```
-or
+
 ```bash
 pip install -r requirements.txt
 ```
