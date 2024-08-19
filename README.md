@@ -35,7 +35,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 
 #
 # 💿 Installation
-### Clone repo
+- ### Clone repo
   ```bash
   git clone https://github.com/Mikzarjr/FaceSegmentation
   ```
@@ -44,6 +44,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 ### Locate to working directory
 
   ___Python___:
+  
     ```python
     import os
     HOME = os.getcwd()
@@ -52,6 +53,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
     print("Now in", os.getcwd())
     ```
   _or __Bash___:
+  
     ```bash
     HOME=$(pwd)
     cd "${HOME}/FaceSegmentation"
