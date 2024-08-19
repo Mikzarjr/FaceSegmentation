@@ -41,8 +41,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
   ```
 
 
-### Locate to working directory
-
+- ### Locate to working directory
   ___Python___:
   
   ```python
