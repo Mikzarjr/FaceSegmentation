@@ -50,11 +50,13 @@ pip install -e setup.py
 ```
 
 # 🚀 Quickstart
+<details>
+  
+</details>
 
 # 📑 Workthrough
-
 ## Segmentation with CLIP-DINO-SAM only 🎨
-
+<details>
 ### Import dependencies
 ```python
 from FaceSegmentation.Pipeline.Config import *
@@ -76,9 +78,10 @@ All separate masks are located in /segmentation/split_masks
 S = FaceSeg(image_path)
 S.Segment
 ```
+</details>
 
 ## Annotations for training YOLO 📝
-
+<details>
 ### Create COCO.json annotations
 ```python
 from FaceSegmentation.Pipeline.Annotator import CreateJson
@@ -105,7 +108,7 @@ C = ConvertCtY(image_path)
 C.Convert()
 ```
 Output will be in `YOLO_DIR` named `YOLO.json`
-
+</details>
 
 
 
