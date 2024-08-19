@@ -77,8 +77,8 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 
 ### Import dependencies
 ```python
-from FaceSegmentation.Pipeline.Config import *
-from FaceSegmentation.Pipeline.Segmentation import FaceSeg
+from Pipeline.Config import *
+from Pipeline.Segmentation import FaceSeg
 ```
 
 ### Choose image to test the framework 
@@ -103,7 +103,7 @@ S.Segment
   
 ### Create COCO.json annotations
 ```python
-from FaceSegmentation.Pipeline.Annotator import CreateJson
+from Pipeline.Annotator import CreateJson
 ```
 ```python
 image_path = "/content/segmentation/img1/img1.jpg"
@@ -117,7 +117,7 @@ Output will be in `COCO_DIR` named `COCO.json`
 
 ### Convert COCO.json annotations to YOLOv8 txt annotatoins
 ```python
-from FaceSegmentation.Pipeline.Converter import COCO-to-YOLO
+from Pipeline.Converter import COCO-to-YOLO
 ```
 ```python
 json_path = f"{COCO_DIR}/COCO.json"
