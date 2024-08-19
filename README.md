@@ -69,7 +69,6 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 # 🚀 Quickstart
 <details>
   
-</details>
 
 # 📑 Workthrough
 ## Segmentation with CLIP-DINO-SAM only 🎨
@@ -87,16 +86,19 @@ sample images are located in FaceSeg/TestImages
 image_path = f"{IMGS_DIR}/img1.jpeg"
 ```
 
-### Run the following cell to get segmentation masks
-Main segmentation mask is located in /segmentation/combined_masks
-
-All separate masks are located in /segmentation/split_masks
+### Get segmentation masks
+- Main segmentation mask is located in /segmentation/combined_masks
+- All separate masks are located in /segmentation/split_masks
 
 ```python
 S = FaceSeg(image_path)
-S.Segment
+Masks = S.Segment
 ```
-</details>
+- If you want to save masks you can run
+  ```python
+  S.SaveMasks()
+  ```
+
 
 ## Annotations for training YOLO 📝
 <details>
