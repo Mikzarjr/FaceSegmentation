@@ -41,7 +41,7 @@ git clone https://github.com/Mikzarjr/FaceSegmentation
 ```
 
 ### Setup Environment
-#### - 1 __Locate to working directory__:
+- #### 1 __Locate to working directory__:
 
 - ___Python___:
 ```python
@@ -59,7 +59,7 @@ cd "${HOME}/FaceSegmentation"
 echo "Now in $(pwd)"
 ```
 
-#### - 2 __Install requirements__:
+- #### 2 __Install requirements__:
 
 ```bash
 pip install -r requirements.txt
