@@ -9,6 +9,7 @@ from autodistill.detection import CaptionOntology
 from autodistill_clip import CLIP
 from autodistill_grounded_sam import GroundedSAM
 
+from FaceSegmentation.Segmentation.BaseSegmentation import Paint
 from FaceSegmentation.src.path_utils import MAIN_DIR
 from FaceSegmentation.src.utils import ConvertImageToGRAY, ConvertImageToBGR
 from FaceSegmentation.src.utils import GetImageName
@@ -196,29 +197,6 @@ class FaceSeg:
                     cleaned_mask[labels == i] = 0
 
             self.MASKS[image] = cleaned_mask
-
-
-def Paint(mask: np.ndarray, color: list) -> np.ndarray:
-    """
-    :Description:
-    Function {Paint} paints mask of desired class to desired color
-
-    :param mask: Mask in cv2.GRAY format
-    :type mask: np.ndarray
-    :param color: RGB color
-    :type color: list
-    :rtype: np.ndarray
-    :return: Colored mask
-    """
-    image = ConvertImageToBGR(mask)
-
-    mask = np.any(image >= 50, axis=2)
-    blacked = np.any(image < 50, axis=2)
-
-    image[mask] = color
-    image[blacked] = [0, 0, 0]
-
-    return image
 
 
 class RemoveIntersections:
