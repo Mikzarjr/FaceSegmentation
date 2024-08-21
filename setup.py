@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='my_project',
-    version='0.1.0',
-    packages=find_packages(include=['docks', 'docks.*', 'src', 'src.*']),
-    description='A brief description of the project',
+    name='FaceSegmentation',
+    version='0.1.1',
+    packages=find_packages(include=['docks', 'src']),
+    description='Face segmentation with YOLO on dataset labelled with CLIP, Grounding DINO and Grounding SAM',
     python_requires='>=3.6',
     install_requires=[
         'autodistill',
