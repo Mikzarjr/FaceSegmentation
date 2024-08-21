@@ -1,7 +1,15 @@
-from Pipeline.Annotation.BaseAnnotation.bboxes import *
-from Pipeline.Annotation.BaseAnnotation.polygon import *
-from Pipeline.Config import *
-from Pipeline.Tools import *
+import json
+import os
+
+import numpy as np
+from PIL import Image
+from matplotlib import pyplot as plt
+from pycocotools.coco import COCO
+
+from FaceSegmentation.Annotation.BaseAnnotation.bboxes import bboxes
+from FaceSegmentation.Annotation.BaseAnnotation.polygon import polygons
+from FaceSegmentation.src.path_utils import MAIN_DIR
+from FaceSegmentation.src.utils import GetImageDir, GetImageName, GetImageDimensions
 
 
 class CreateJson:

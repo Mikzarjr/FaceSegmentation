@@ -1,8 +1,10 @@
-from Pipeline.Config import *
-from Pipeline.Tools import *
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+from skimage import measure
 
 
-class polygons():
+class polygons:
     def __init__(self, binary_mask_path, original_image_path):
         self.binary_mask_path = binary_mask_path
         self.original_image_path = original_image_path
@@ -11,13 +13,14 @@ class polygons():
 
         self.polygons = []
 
-    def close_contour(self, contour):
+    @staticmethod
+    def close_contour(contour):
         if not np.array_equal(contour[0], contour[-1]):
             contour = np.vstack((contour, contour[0]))
         return contour
 
     def binary_mask_to_polygon(self, tolerance=2):
-        polygons = []
+        plgns = []
         padded_binary_mask = np.pad(self.binary_mask, pad_width=1, mode='constant', constant_values=0)
         blurred_binary_mask = cv2.GaussianBlur(padded_binary_mask, (5, 5), 0)
         contours = measure.find_contours(blurred_binary_mask, 10)
@@ -31,10 +34,10 @@ class polygons():
             contour = np.flip(contour, axis=1)
             segmentation = contour.ravel().tolist()
             segmentation = [0 if i < 0 else i for i in segmentation]
-            polygons.append(segmentation)
+            plgns.append(segmentation)
 
-        self.polygons = polygons
-        return polygons
+        self.polygons = plgns
+        return plgns
 
     def visualize_polygon_on_image(self):
         plt.figure(figsize=(10, 10))

@@ -1,7 +1,8 @@
-from Pipeline.Config import *
+import cv2
+import supervision as sv
 
 
-class bboxes():
+class bboxes:
     def __init__(self, image_path):
         self.image_path = image_path
         self.BBoxes = []

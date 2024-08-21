@@ -1,0 +1,11 @@
+autodistill
+autodistill_clip
+autodistill_grounded_sam
+numpy
+opencv-python
+pillow
+roboflow
+supervision
+tqdm
+pycocotools
+scikit-image

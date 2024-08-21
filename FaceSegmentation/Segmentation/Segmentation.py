@@ -1,44 +1,17 @@
-from Pipeline.Tools import *
+import os
 
+import cv2
+import numpy as np
+import supervision as sv
+from PIL import Image
+from autodistill.core.composed_detection_model import ComposedDetectionModel
+from autodistill.detection import CaptionOntology
+from autodistill_clip import CLIP
+from autodistill_grounded_sam import GroundedSAM
 
-def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:
-    """
-    :Description:
-    Function {ConvertImageToGRAY} converts the image in cv2.GRAY format.
-
-    :param image: Original image
-    :type image: np.ndarray
-    :rtype: np.ndarray
-    :return: Image in cv2.GRAY
-    """
-    if image is None:
-        raise ValueError("The image is None.")
-    if len(image.shape) == 3:
-        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    elif len(image.shape) == 2:
-        return image
-    else:
-        raise ValueError("Invalid image format.")
-
-
-def ConvertImageToBGR(image: np.ndarray) -> np.ndarray:
-    """
-    :Description:
-    Function {ConvertImageToBGR} converts the image in cv2.BGR format.
-
-    :param image: Original image
-    :type image: np.ndarray
-    :rtype: np.ndarray
-    :return: Image in cv2.BGR
-    """
-    if image is None:
-        raise ValueError("The image is None.")
-    if len(image.shape) == 2:
-        return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-    elif len(image.shape) == 3:
-        return image
-    else:
-        raise ValueError("Invalid image format.")
+from FaceSegmentation.src.path_utils import MAIN_DIR
+from FaceSegmentation.src.utils import ConvertImageToGRAY, ConvertImageToBGR
+from FaceSegmentation.src.utils import GetImageName
 
 
 class FaceSeg:

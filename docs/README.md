@@ -73,9 +73,10 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 ## Segmentation with CLIP-DINO-SAM only 🎨
 
 ### Import dependencies
+
 ```python
-from Pipeline.Config import *
-from Pipeline.Segmentation import FaceSeg
+from FaceSegmentation.src.path_utils import *
+from FaceSegmentation.Segmentation.Segmentation import FaceSeg
 ```
 
 ### Choose image to test the framework 
@@ -101,8 +102,9 @@ S.SaveMasks()
 ## Annotations for training YOLO 📝
   
 ### Create COCO.json annotations
+
 ```python
-from Pipeline.Annotator import CreateJson
+from src.Annotator import CreateJson
 ```
 ```python
 image_path = "/content/segmentation/img1/img1.jpg"
@@ -115,8 +117,9 @@ A.CheckJson()
 Output will be in `COCO_DIR` named `COCO.json`
 
 ### Convert COCO.json annotations to YOLOv8 txt annotatoins
+
 ```python
-from Pipeline.Converter import COCOtoYOLO
+from src.Converter import COCOtoYOLO
 ```
 ```python
 json_path = f"{COCO_DIR}/COCO.json"

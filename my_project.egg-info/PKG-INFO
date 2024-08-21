@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: my_project
+Version: 0.1.0
+Summary: A brief description of the project
+Requires-Python: >=3.6
+License-File: LICENSE
+Requires-Dist: autodistill
+Requires-Dist: autodistill_clip
+Requires-Dist: autodistill_grounded_sam
+Requires-Dist: numpy
+Requires-Dist: opencv-python
+Requires-Dist: pillow
+Requires-Dist: roboflow
+Requires-Dist: supervision
+Requires-Dist: tqdm
+Requires-Dist: pycocotools
+Requires-Dist: scikit-image
