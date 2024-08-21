@@ -6,8 +6,8 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from pycocotools.coco import COCO
 
-from FaceSegmentation.Annotation.BaseAnnotation.bboxes import bboxes
-from FaceSegmentation.Annotation.BaseAnnotation.polygon import polygons
+from FaceSegmentation.Annotation.BaseAnnotation.Bboxes import bboxes
+from FaceSegmentation.Annotation.BaseAnnotation.Polygon import polygons
 from FaceSegmentation.src.path_utils import MAIN_DIR
 from FaceSegmentation.src.utils import GetImageDir, GetImageName, GetImageDimensions
 

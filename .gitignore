@@ -1,2 +1,2 @@
-#Demo/SegmentationOnly.py
-Constant/weights/groundingdino_swint_ogc.pth
+#demo/SegmentationOnly.py
+constant/weights/groundingdino_swint_ogc.pth
