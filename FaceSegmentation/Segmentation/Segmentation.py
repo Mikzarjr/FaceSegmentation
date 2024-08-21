@@ -68,15 +68,15 @@ class FaceSeg:
 
         :rtype: None
         """
-        self.Prepare()
+        self.MakeDirs()
         self.SaveOriginalImage()
         self.SaveSplitMasks()
         self.SaveCombinedMask()
 
-    def Prepare(self) -> None:
+    def MakeDirs(self) -> None:
         """
         :Description:
-        Method {Prepare} creates all needed directories
+        Method {MakeDirs} creates all needed directories
 
         :rtype: None
         """
