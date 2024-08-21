@@ -20,6 +20,7 @@ class FaceSeg:
         TODO: 1 Finish all dock-strings
         TODO: 2 Naming
         TODO: Rework __init__
+        TODO: Create functions for saving images in separate file
 
         :param image_path: Path to image desired for segmentation
         :type image_path: str
@@ -145,32 +146,36 @@ class FaceSeg:
         img = cv2.imread(self.image_path)
         Image.fromarray(img).save(f"{self.WORK_DIR}/{self.image_name}.jpg")
 
-    def SaveCombinedMask(self):
+    def SaveCombinedMask(self) -> None:
+        """
+        :Description:
+        Method {SaveCombinedMask} saves combined mask in {self.COMBINED_MASK_DIR}
+
+        :rtype: None
+        """
         img = self.MASKS['face']
         img = ConvertImageToBGR(img)
         combined_mask = np.zeros_like(img)
 
         for i in self.MASKS:
-            mask = self.MASKS[i]
-            mask = self.Paint(mask, self.COLORS[i])
+            mask = self.Paint(self.MASKS[i], self.COLORS[i])
             combined_mask += mask
 
         annotated_frame_pil = Image.fromarray(combined_mask)
         annotated_frame_pil.save(f"{self.COMBINED_MASK_DIR}/{self.image_name}.jpg")
 
     @staticmethod
-    def Paint(image_arr: np.ndarray, color: list):
+    def Paint(mask: np.ndarray, color: list):
         """
         :Description:
-        Method {RemoveIntersections} removes all intersections of all masks,
-        converts new masks to grayscale and saves them in SPLIT_MASK_DIR
+        Staticmethod {Paint} paints mask of desired class to desired color
 
-        :param image_arr:
+        :param mask:
         :param color:
         :rtype: ???
         :return: ???
         """
-        image = ConvertImageToBGR(image_arr)
+        image = ConvertImageToBGR(mask)
 
         mask = np.any(image >= 50, axis=2)
         blacked = np.any(image < 50, axis=2)
