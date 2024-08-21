@@ -19,6 +19,7 @@ class FaceSeg:
         """
         TODO: 1 Finish all dock-strings
         TODO: 2 Naming
+        TODO: Rework __init__
 
         :param image_path: Path to image desired for segmentation
         :type image_path: str
@@ -87,8 +88,8 @@ class FaceSeg:
 
     def SegmentImage(self) -> None:
         """
-        :Description:
-        Method {SegmentImage} creates all needed directories
+        :Description: Method {SegmentImage} runs base models (CLIP grounding DINO and grounding SAM) for face
+        segmentation
 
         :rtype: None
         """
@@ -126,13 +127,21 @@ class FaceSeg:
 
     def SaveSplitMasks(self) -> None:
         """
+        :Description:
+        Method {SaveSplitMasks} saves all masks for each class in {self.SPLIT_MASK_DIR}
 
         :rtype: None
         """
         for i in self.MASKS:
             Image.fromarray(self.MASKS[i]).save(f"{self.SPLIT_MASK_DIR}/{i}.jpg")
 
-    def SaveOriginalImage(self):
+    def SaveOriginalImage(self) -> None:
+        """
+        :Description:
+        Method {SaveOriginalImage} saves original image in {self.WORK_DIR}
+
+        :rtype: None
+        """
         img = cv2.imread(self.image_path)
         Image.fromarray(img).save(f"{self.WORK_DIR}/{self.image_name}.jpg")
 
