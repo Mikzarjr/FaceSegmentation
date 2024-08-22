@@ -5,16 +5,15 @@ HINT_LEVEL = 5
 logging.addLevelName(HINT_LEVEL, "HINT")
 
 
-def hint(self: object, message: object, *args: object, **kws: object) -> object:
+def hint(self: logging.Logger, message: str, *args: tuple, **kws: dict) -> None:
     """
-    :Description:
-    Function {hint} ...
+    Logs a message with level 'HINT' on this logger.
 
-    :param self:
-    :param message:
-    :param args:
-    :param kws:
-    :rtype: object
+    :param self: The logger instance that this method is called on.
+    :param message: The message to be logged.
+    :param args: Additional positional arguments to be passed to the logger.
+    :param kws: Additional keyword arguments to be passed to the logger.
+    :rtype: None
     """
     if self.isEnabledFor(HINT_LEVEL):
         self._log(HINT_LEVEL, message, args, **kws)
@@ -32,15 +31,13 @@ RED = "\033[31m"
 BOLD_BRIGHT_RED = "\033[1;91m"
 
 
-def colored_log(level: object, message: object) -> object:
+def colored_log(level: str, message: str) -> None:
     """
-    :Description:
-    Function {colored_log} ...
+    Logs a message with color based on the logging level.
 
-
-    :param level:
-    :param message:
-    :rtype: object
+    :param level: The logging level as a string ('HINT', 'INFO', 'WARNING', 'ERROR', 'CRITICAL').
+    :param message: The message to be logged.
+    :rtype: None
     """
     color = {
         'HINT': BLUE,
@@ -54,12 +51,6 @@ def colored_log(level: object, message: object) -> object:
 
     logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), f"{color}{message}{RESET}")
 
-
-colored_log('HINT', "This is a hint message.")
-colored_log('INFO', "This is an info message.")
-colored_log('WARNING', "This is a warning message.")
-colored_log('ERROR', "This is an error message.")
-colored_log('CRITICAL', "This is a critical message.")
 
 MAIN_DIR = os.getcwd()
 IMGS_DIR = os.path.join(MAIN_DIR, "docks/TestImages")
