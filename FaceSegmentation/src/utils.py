@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 
 HINT_LEVEL = 5
 logging.addLevelName(HINT_LEVEL, "HINT")
@@ -53,54 +52,8 @@ def colored_log(level: str, message: str) -> None:
     logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), f"{color}{message}{RESET}")
 
 
-# def get_main_dir():
-#     if 'COLAB_GPU' in os.environ or 'COLAB_TPU_ADDR' in os.environ:
-#         print("Running in Google Colab")
-#         return '/content'
-#     try:
-#         if 'ipykernel' in sys.modules:
-#             print("Running in Jupyter Notebook or JupyterLab")
-#             return os.path.abspath(os.path.join(os.getcwd(), '..', '..'))
-#     except ImportError:
-#         pass
-#     try:
-#         print("Running locally")
-#         return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-#     except NameError:
-#         return os.path.abspath(os.getcwd())
-#
-#
-# MAIN_DIR = get_main_dir()
-
-
-def find_project_root(starting_dir, marker_file='setup.py'):
-    current_dir = starting_dir
-    while True:
-        if os.path.exists(os.path.join(current_dir, marker_file)):
-            return current_dir
-        new_dir = os.path.dirname(current_dir)
-        if new_dir == current_dir:
-            return None
-        current_dir = new_dir
-
-
-def get_main_dir():
-    try:
-        starting_dir = os.path.dirname(os.path.abspath(__file__))
-    except NameError:
-        starting_dir = os.getcwd()
-
-    project_root = find_project_root(starting_dir)
-
-    if project_root is not None:
-        return project_root
-    else:
-        return starting_dir
-
-
-MAIN_DIR = get_main_dir()
-
-# MAIN_DIR = os.getcwd()
+CURR_DIR = os.getcwd()
+MAIN_DIR = os.path.abspath(os.path.join(CURR_DIR, '..', '..'))
 IMGS_DIR = os.path.join(MAIN_DIR, "docks/TestImages")
 COCO_DIR = os.path.join(MAIN_DIR, "docks/Results/COCO")
 YOLO_DIR = os.path.join(MAIN_DIR, "docks/Results/YOLO")
