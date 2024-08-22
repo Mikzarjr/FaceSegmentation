@@ -10,9 +10,9 @@ from autodistill_clip import CLIP
 from autodistill_grounded_sam import GroundedSAM
 
 from FaceSegmentation.Segmentation.BaseSegmentation import Paint
-from FaceSegmentation.src.path_utils import MAIN_DIR
-from FaceSegmentation.src.utils import ConvertImageToGRAY, ConvertImageToBGR
-from FaceSegmentation.src.utils import GetImageName
+from FaceSegmentation.src.utils import MAIN_DIR
+from FaceSegmentation.src.helpers import ConvertImageToGRAY, ConvertImageToBGR
+from FaceSegmentation.src.helpers import get_image_name
 
 
 class FaceSeg:
@@ -28,7 +28,7 @@ class FaceSeg:
         """
         self.image_path = image_path
         self.SEG_DIR = f'{MAIN_DIR}/segmentation'
-        self.image_name = GetImageName(image_path)
+        self.image_name = get_image_name(image_path)
         self.WORK_DIR = f'{self.SEG_DIR}/{self.image_name}'
         self.SPLIT_MASK_DIR = f'{self.WORK_DIR}/split_masks'
         self.COMBINED_MASK_DIR = f'{self.WORK_DIR}/combined_masks'

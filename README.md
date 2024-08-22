@@ -75,7 +75,7 @@ Here are example predictions of YOLO model segmenting parts of face after being 
 ### Import dependencies
 
 ```python
-from FaceSegmentation.src.path_utils import *
+from FaceSegmentation.src.utils import *
 from FaceSegmentation.Segmentation.Segmentation import FaceSeg
 ```
 

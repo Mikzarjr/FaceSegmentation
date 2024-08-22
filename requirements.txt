@@ -9,3 +9,6 @@ supervision
 tqdm
 pycocotools
 scikit-image
+torch
+torchvision
+colorlog

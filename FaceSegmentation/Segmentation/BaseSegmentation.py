@@ -1,6 +1,6 @@
 import numpy as np
 
-from FaceSegmentation.src.utils import ConvertImageToBGR
+from FaceSegmentation.src.helpers import ConvertImageToBGR
 
 
 def Paint(mask: np.ndarray, color: list) -> np.ndarray:

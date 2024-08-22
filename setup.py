@@ -18,5 +18,8 @@ setup(
         'tqdm',
         'pycocotools',
         'scikit-image',
+        'torch',
+        'torchvision',
+        'colorlog'
     ],
 )

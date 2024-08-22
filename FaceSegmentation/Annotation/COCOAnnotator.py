@@ -8,20 +8,20 @@ from pycocotools.coco import COCO
 
 from FaceSegmentation.Annotation.BaseAnnotation.Bboxes import bboxes
 from FaceSegmentation.Annotation.BaseAnnotation.Polygon import polygons
-from FaceSegmentation.src.path_utils import MAIN_DIR
-from FaceSegmentation.src.utils import GetImageDir, GetImageName, GetImageDimensions
+from FaceSegmentation.src.utils import MAIN_DIR
+from FaceSegmentation.src.helpers import get_image_dir, get_image_name, get_image_dimensions
 
 
 class CreateJson:
     def __init__(self, original_image_path):
         self.original_image_path = original_image_path
-        self.original_image_dir = GetImageDir(original_image_path)
-        self.original_image_name = GetImageName(original_image_path)
+        self.original_image_dir = get_image_dir(original_image_path)
+        self.original_image_name = get_image_name(original_image_path)
         print(self.original_image_dir)
         self.mask_dir = f"{self.original_image_dir}/split_masks"
 
         self.Json = None
-        self.ImageHeight, self.ImageWidth = GetImageDimensions(original_image_path)
+        self.ImageHeight, self.ImageWidth = get_image_dimensions(original_image_path)
 
     def BaseDrawAnnotatoins(self):
         coco = COCO(f'{MAIN_DIR}/{self.Json}.json')
@@ -81,7 +81,7 @@ class CreateJson:
         ccc = 0
         for counter in range(len(folder)):
             file_path = folder[counter]
-            ClassName = GetImageName(file_path)
+            ClassName = get_image_name(file_path)
             annotations, l = self.Annotate(ClassName, ccc)
             ccc += l
             for i in range(len(annotations)):
