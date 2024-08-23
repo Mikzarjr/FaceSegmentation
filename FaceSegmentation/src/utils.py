@@ -1,4 +1,5 @@
 import inspect
+import linecache
 import logging
 import os
 
@@ -21,30 +22,6 @@ def hint(self: logging.Logger, message: str, *args: tuple, **kws: dict) -> None:
         self._log(HINT_LEVEL, message, args, **kws)
 
 
-logging.Logger.hint = hint
-logging.basicConfig(level=HINT_LEVEL)
-logger = logging.getLogger(__name__)
-
-colors = {
-    "RESET": "30",
-    "RED": "31",
-    "GREEN": "32",
-    "YELLOW": "33",
-    "BLUE": "34",
-    "MAGENTA": "35",
-    "CYAN": "36",
-    "WHITE": "37",
-    "BRIGHT_BLACK": "1;90",
-    "BRIGHT_RED": "1;91",
-    "BRIGHT_GREEN": "1;92",
-    "BRIGHT_YELLOW": "1;93",
-    "BRIGHT_BLUE": "1;94",
-    "BRIGHT_MAGENTA": "1;95",
-    "BRIGHT_CYAN": "1;96",
-    "BRIGHT_WHITE": "1;97"
-}
-
-
 def colored_log(level: str, message: str) -> None:
     """
     :Description:
@@ -54,6 +31,9 @@ def colored_log(level: str, message: str) -> None:
     :param message: The message to be logged.
     :rtype: None
     """
+    logging.Logger.hint = hint
+    logging.basicConfig(level=HINT_LEVEL)
+    logger = logging.getLogger(__name__)
     color = {
         'HINT': "BLUE",
         'INFO': "GREEN",
@@ -63,41 +43,75 @@ def colored_log(level: str, message: str) -> None:
     }.get(level)
     if level == 'ERROR':
         message = (f":\t{message}\n"
-                   f"{'-' * (max(len(message.split('\n')[0]) + 20, len(message.split('\n')[-1])))}"
-                   f"\n\n")
+                   f"{'-' * (max(len(message.split('\n')[0]) + 20,
+                                 len(max(message.split('\n'), key=len))))}"
+                   f"\n")
     if level == 'CRITICAL':
         message = f"\n{'*' * (len(message) + 4)}\n* {message.upper()} *\n{'*' * (len(message) + 4)}\n\n"
 
     return logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), colored_string(message, color))
 
 
-def get_error_origin():
+def show_error(error):
     frame = inspect.currentframe()
-    caller_frame = frame.f_back.f_back
-    filename = caller_frame.f_code.co_filename
-    lineno = caller_frame.f_lineno
-    funcname = caller_frame.f_code.co_name
-    return frame, caller_frame, filename, lineno, funcname
+    caller_frame = frame.f_back
+    error_messages = []
+
+    while caller_frame:
+        filename = caller_frame.f_code.co_filename
+        lineno = caller_frame.f_lineno
+        funcname = caller_frame.f_code.co_name
+        code_line = linecache.getline(filename, lineno).strip()
+        error_message = (f"\nIn file {filename}:{lineno}, function '{funcname}'\n\t"
+                         f"{code_line}")
+        error_messages.append(error_message)
+        caller_frame = caller_frame.f_back
+
+    for message in reversed(error_messages):
+        colored_log("ERROR", message)
 
 
 def colored_string(string, color):
+    colors = {
+        "RESET": "30",
+        "RED": "31",
+        "GREEN": "32",
+        "YELLOW": "33",
+        "BLUE": "34",
+        "MAGENTA": "35",
+        "CYAN": "36",
+        "WHITE": "37",
+        "BRIGHT_BLACK": "1;90",
+        "BRIGHT_RED": "1;91",
+        "BRIGHT_GREEN": "1;92",
+        "BRIGHT_YELLOW": "1;93",
+        "BRIGHT_BLUE": "1;94",
+        "BRIGHT_MAGENTA": "1;95",
+        "BRIGHT_CYAN": "1;96",
+        "BRIGHT_WHITE": "1;97"
+    }
     cc = colors.get(color.upper())
     if cc:
         begin = f"\033[{cc}m"
         end = "\033[0m"
         return begin + string + end
     else:
-        frame, caller_frame, filename, lineno, funcname = get_error_origin()
-
-        error_message = (f"Unproper color: '{color}' in string: '{string}'\n"
-                         f"In file '{filename}', function '{funcname}', line {lineno}")
-
-        colored_log("ERROR", error_message)
+        show_error(f"Unproper color: '{color}' in string: '{string}'")
         return ''
 
 
-print(colored_string("This sentence should be green", "bright_green"))
-print(colored_string("This sentence should be green", "bright green"))
+def example_function():
+    try:
+        raise ValueError("An example error occurred")
+    except ValueError as e:
+        show_error(str(e))
+
+
+def deep_function():
+    example_function()
+
+
+deep_function()
 
 
 def set_paths() -> tuple[str, str, str, str, str]:
