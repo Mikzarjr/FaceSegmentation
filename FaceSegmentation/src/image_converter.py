@@ -9,17 +9,22 @@ from PIL import Image
 from matplotlib import pyplot as plt
 
 from FaceSegmentation.src.helpers import get_image_format
-from FaceSegmentation.src.utils import colored_log, colored_string
+from FaceSegmentation.src.utils import colored_log, colored_string, show_error
 
 
 @singledispatch
 def ImageConverter(value):
     valid_types = ", ".join(("Pathname", "Numpy Array", "PIL image", "Tensor", "In-memory Binary Streams", "Raw Bytes",
                              "Matplotlib Figure"))
-    colored_log("ERROR",
-                f"Input image type {colored_string(value, 'BRIGHT_RED')} not supported\n"
-                f"Please input image in one of the following supported types: "
-                f"{colored_string(valid_types, 'BRIGHT_RED')}")
+    error = (f"Input image type {colored_string(f"'{value}'", 'BRIGHT_RED')} not supported\n"
+             f"Please input image in one of the following supported types: "
+             f"{colored_string(f"{valid_types}", 'BRIGHT_RED')}")
+
+    show_error(error)
+    # colored_log("ERROR",
+    #             f"Input image type {colored_string(f"'{value}'", 'BRIGHT_RED')} not supported\n"
+    #             f"Please input image in one of the following supported types: "
+    #             f"{colored_string(f"{valid_types}", 'BRIGHT_RED')}")
 
 
 @ImageConverter.register(str)
@@ -87,3 +92,24 @@ image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/FaceSegmentation/sr
 #     raw_bytes_image = f.read()
 
 ImageConverter(False)
+
+# colors = {
+#     "RESET": "30",
+#     "RED": "31",
+#     "GREEN": "32",
+#     "YELLOW": "33",
+#     "BLUE": "34",
+#     "MAGENTA": "35",
+#     "CYAN": "36",
+#     "WHITE": "37",
+#     "BRIGHT_BLACK": "1;90",
+#     "BRIGHT_RED": "1;91",
+#     "BRIGHT_GREEN": "1;92",
+#     "BRIGHT_YELLOW": "1;93",
+#     "BRIGHT_BLUE": "1;94",
+#     "BRIGHT_MAGENTA": "1;95",
+#     "BRIGHT_CYAN": "1;96",
+#     "BRIGHT_WHITE": "1;97"
+# }
+# for i in colors:
+#     print(colored_string(f"Hello World!", i))

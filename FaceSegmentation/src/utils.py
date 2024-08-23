@@ -95,28 +95,14 @@ def colored_string(string: any, color: str) -> Optional[str]:
 
 
 def visible_length(s: str) -> int:
-    """
-    Calculate the visible length of a string, ignoring ANSI escape sequences.
-
-    :param s: The string to measure.
-    :return: The visible length of the string.
-    """
     ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
     return len(ansi_escape.sub('', s))
 
 
 def show_error(error: str) -> None:
-    """
-    :Description:
-    Logs an error message in bright red, traces back through the stack to identify the
-    source of the error, and terminates the program.
-
-    :param error: The error message to display.
-    :rtype: None
-    """
     colored_log("ERROR", colored_string(error, 'bright_red'))
     frame = inspect.currentframe()
-    caller_frame = frame.f_back.f_back
+    caller_frame = frame.f_back
     error_messages = []
 
     while caller_frame:
@@ -124,8 +110,8 @@ def show_error(error: str) -> None:
         lineno = caller_frame.f_lineno
         funcname = caller_frame.f_code.co_name
         code_line = linecache.getline(filename, lineno).strip()
-        error_message = (f"\nIn file {filename}:{lineno}, function '{funcname}'\n\t"
-                         f"{code_line}")
+        error_message = (f"\nIn file {filename}:{lineno}, function '{funcname}'\n"
+                         f"-----> \t {code_line}")
         error_messages.append(error_message)
         caller_frame = caller_frame.f_back
 
