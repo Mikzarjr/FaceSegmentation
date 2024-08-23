@@ -9,15 +9,17 @@ from PIL import Image
 from matplotlib import pyplot as plt
 
 from FaceSegmentation.src.helpers import get_image_format
-from FaceSegmentation.src.utils import colored_log
+from FaceSegmentation.src.utils import colored_log, colored_string
 
 
 @singledispatch
 def ImageConverter(value):
-    valid_types = ", ".join(("Pathname", "Numpy Array", "PIL image", "Tensor"))
+    valid_types = ", ".join(("Pathname", "Numpy Array", "PIL image", "Tensor", "In-memory Binary Streams", "Raw Bytes",
+                             "Matplotlib Figure"))
     colored_log("ERROR",
-                f"Input image type \033[1;91m'{str(value)}'\033[0m not supported\nPlease input image in one "
-                f"of the following supported types: {valid_types}")
+                f"Input image type {colored_string(value, 'BRIGHT_RED')} not supported\n"
+                f"Please input image in one of the following supported types: "
+                f"{colored_string(valid_types, 'BRIGHT_RED')}")
 
 
 @ImageConverter.register(str)
@@ -85,8 +87,3 @@ image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/FaceSegmentation/sr
 #     raw_bytes_image = f.read()
 
 ImageConverter(False)
-# process(cv2_image)
-# process(PIL_image)
-# process(tensor_img)
-# process(binary_image)
-# process(raw_bytes_image)

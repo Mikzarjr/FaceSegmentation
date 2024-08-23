@@ -2,7 +2,9 @@ import inspect
 import linecache
 import logging
 import os
+import re
 import sys
+from typing import Optional
 
 HINT_LEVEL = 5
 logging.addLevelName(HINT_LEVEL, "HINT")
@@ -26,7 +28,7 @@ def hint(self: logging.Logger, message: str, *args: tuple, **kws: dict) -> None:
 def colored_log(level: str, message: str) -> None:
     """
     :Description:
-    Function {colored_log} logs a message with color based on the logging level.
+    Logs a message with color based on the logging level.
 
     :param level: The logging level as a string ('HINT', 'INFO', 'WARNING', 'ERROR', 'CRITICAL').
     :param message: The message to be logged.
@@ -44,16 +46,28 @@ def colored_log(level: str, message: str) -> None:
     }.get(level)
     if level == 'ERROR':
         message = (f":\t{message}\n"
-                   f"{'-' * (max(len(message.split('\n')[0]) + 20,
-                                 len(max(message.split('\n'), key=len))))}"
+                   f"{'-' * (max(visible_length(message.split('\n')[0]) + 20,
+                                 visible_length(max(message.split('\n'), key=visible_length))))}"
                    f"\n")
+
+        for i in message.split('\n'):
+            print(i, len(i))
     if level == 'CRITICAL':
         message = f"\n{'*' * (len(message) + 4)}\n* {message.upper()} *\n{'*' * (len(message) + 4)}\n\n"
 
-    return logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), colored_string(message, color))
+    logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), colored_string(message, color))
 
 
-def colored_string(string, color):
+def colored_string(string: any, color: str) -> Optional[str]:
+    """
+    :Description:
+    Converts any input to a string and applies the specified color using ANSI escape codes.
+
+    :param string: The input to be converted to a string and colored.
+    :param color: The color to apply, specified as a string (e.g., 'RED', 'BRIGHT_GREEN').
+    :return: The colored string, or None if an invalid color is provided.
+    :rtype: Optional[str]
+    """
     colors = {
         "RESET": "30",
         "RED": "31",
@@ -72,6 +86,8 @@ def colored_string(string, color):
         "BRIGHT_CYAN": "1;96",
         "BRIGHT_WHITE": "1;97"
     }
+    string = str(string)
+
     cc = colors.get(color.upper())
     if cc:
         begin = f"\033[{cc}m"
@@ -79,10 +95,28 @@ def colored_string(string, color):
         return begin + string + end
     else:
         show_error(f"Unproper color: '{color}' in string: '{string}'")
-        return ''
 
 
-def show_error(error):
+def visible_length(s: str) -> int:
+    """
+    Calculate the visible length of a string, ignoring ANSI escape sequences.
+
+    :param s: The string to measure.
+    :return: The visible length of the string.
+    """
+    ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+    return len(ansi_escape.sub('', s))
+
+
+def show_error(error: str) -> None:
+    """
+    :Description:
+    Logs an error message in bright red, traces back through the stack to identify the
+    source of the error, and terminates the program.
+
+    :param error: The error message to display.
+    :rtype: None
+    """
     colored_log("ERROR", colored_string(error, 'bright_red'))
     frame = inspect.currentframe()
     caller_frame = frame.f_back.f_back
