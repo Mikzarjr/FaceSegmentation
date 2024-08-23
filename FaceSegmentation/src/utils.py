@@ -7,7 +7,8 @@ logging.addLevelName(HINT_LEVEL, "HINT")
 
 def hint(self: logging.Logger, message: str, *args: tuple, **kws: dict) -> None:
     """
-    Logs a message with level 'HINT' on this logger.
+    :Description:
+    Function {hint} logs a message with level 'HINT' on this logger.
 
     :param self: The logger instance that this method is called on.
     :param message: The message to be logged.
@@ -33,7 +34,8 @@ BOLD_BRIGHT_RED = "\033[1;91m"
 
 def colored_log(level: str, message: str) -> None:
     """
-    Logs a message with color based on the logging level.
+    :Description:
+    Function {colored_log} logs a message with color based on the logging level.
 
     :param level: The logging level as a string ('HINT', 'INFO', 'WARNING', 'ERROR', 'CRITICAL').
     :param message: The message to be logged.
@@ -46,14 +48,36 @@ def colored_log(level: str, message: str) -> None:
         'ERROR': RED,
         'CRITICAL': BOLD_BRIGHT_RED,
     }.get(level, RESET)
+    if level == 'ERROR':
+        message = f"\n{'-' * (len(message))}\n{message}\n{'-' * (len(message))}\n\n"
     if level == 'CRITICAL':
-        message = f"\n{'*' * 50}\n{message.upper()}\n{'*' * 50}\n"
+        message = f"\n{'*' * (len(message) + 4)}\n* {message.upper()} *\n{'*' * (len(message) + 4)}\n\n"
 
     logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), f"{color}{message}{RESET}")
 
 
-CURR_DIR = os.getcwd()
-MAIN_DIR = os.path.abspath(os.path.join(CURR_DIR, '..', '..'))
-IMGS_DIR = os.path.join(MAIN_DIR, "docks/TestImages")
-COCO_DIR = os.path.join(MAIN_DIR, "docks/Results/COCO")
-YOLO_DIR = os.path.join(MAIN_DIR, "docks/Results/YOLO")
+def set_paths() -> tuple[str, str, str, str, str]:
+    """
+    :Description:
+    Function {set_paths} sets and returns the key directory paths for the project.
+
+    :rtype: tuple[str, str, str, str, str]
+    :return: A tuple containing paths for CURR_DIR, MAIN_DIR, WORK_DIR, IMGS_DIR, OUTPUT_COCO_DIR, OUTPUT_YOLO_DIR.
+    """
+    CURR_DIR = os.path.abspath(os.path.dirname(__file__))
+
+    MAIN_EXT_DIR = os.path.abspath(os.path.join(CURR_DIR, '..', '..'))
+    WORKING_DIR = os.path.join(MAIN_EXT_DIR, "work")
+
+    IMAGES_DIR = os.path.join(MAIN_EXT_DIR, "constant/Assets/TestImages")
+    OUTPUT_COCO_DIR = os.path.join(WORKING_DIR, "docks/Results/COCO")
+    OUTPUT_YOLO_DIR = os.path.join(WORKING_DIR, "docks/Results/YOLO")
+
+    for directory in [WORKING_DIR, IMAGES_DIR, OUTPUT_COCO_DIR, OUTPUT_YOLO_DIR]:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+    return MAIN_EXT_DIR, WORKING_DIR, IMAGES_DIR, OUTPUT_COCO_DIR, OUTPUT_YOLO_DIR
+
+
+MAIN_DIR, WORK_DIR, IMGS_DIR, COCO_DIR, YOLO_DIR = set_paths()

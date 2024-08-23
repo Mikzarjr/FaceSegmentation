@@ -1,18 +1,22 @@
 import os
+from typing import Optional, Tuple
 
 import cv2
 import numpy as np
 from PIL import Image
 
+from FaceSegmentation.src.utils import colored_log
 
-def get_image_format(image_path: str) -> object:
+
+def get_image_format(image_path: str) -> Optional[str]:
     """
     :Description:
-    Function {get_image_format} ...
+    Function {get_image_format} determines the format of the image at the given path.
 
-    :param image_path:
-    :return:
-    :rtype: object
+    :param image_path: The file path to the image.
+    :type image_path: str
+    :return: The format of the image (e.g., 'JPEG', 'PNG'), or None if the image cannot be opened or is invalid.
+    :rtype: Optional[str]
     """
     try:
         with Image.open(image_path) as img:
@@ -21,21 +25,50 @@ def get_image_format(image_path: str) -> object:
         return None
 
 
-def get_image_name(image_path):
+def get_image_name(image_path: str) -> str:
+    """
+    :Description:
+    Function {get_image_name} extracts the name of the image file without its extension.
+
+    :param image_path: The file path to the image.
+    :return: The name of the image file without the extension.
+    :rtype: str
+    """
     image_name = os.path.basename(image_path)
     name, _ = os.path.splitext(image_name)
     return name
 
 
-def get_image_dir(image_path):
+def get_image_dir(image_path: str) -> str:
+    """
+    :Description:
+    Function {get_image_dir} gets the directory path where the image is located.
+
+    :param image_path: The file path to the image.
+    :return: The directory containing the image.
+    :rtype: str
+    """
     directory = os.path.dirname(image_path)
     return directory
 
 
-def get_image_dimensions(image_path):
-    with Image.open(image_path) as img:
-        width, height = img.size
-    return width, height
+def get_image_dimensions(image_path: str) -> Optional[Tuple[int, int]]:
+    """
+    :Description:
+    Function {get_image_dimensions} retrieves the dimensions (width and height) of the image.
+
+    :param image_path: The file path to the image.
+    :return: A tuple containing the width and height of the image in pixels.
+    :rtype: Optional[Tuple[int, int]]
+    :raises IOError: If the image cannot be opened or read.
+    """
+    try:
+        with Image.open(image_path) as img:
+            width, height = img.size
+        return width, height
+    except IOError as e:
+        colored_log('ERROR', f"Failed to open image '{image_path}'. Error: {e}")
+        raise
 
 
 def ConvertImageToGRAY(image: np.ndarray) -> np.ndarray:

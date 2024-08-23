@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Optional
 
 import numpy as np
 from PIL import Image
@@ -8,8 +9,8 @@ from pycocotools.coco import COCO
 
 from FaceSegmentation.Annotation.BaseAnnotation.Bboxes import bboxes
 from FaceSegmentation.Annotation.BaseAnnotation.Polygon import polygons
-from FaceSegmentation.src.utils import MAIN_DIR
 from FaceSegmentation.src.helpers import get_image_dir, get_image_name, get_image_dimensions
+from FaceSegmentation.src.utils import MAIN_DIR
 
 
 class CreateJson:
@@ -32,7 +33,10 @@ class CreateJson:
         cat_ids = coco.getCatIds()
         return coco, img, image, cat_ids
 
-    def DrawAnnotations(self, task, coco, img, image, cat_ids, cat_id):
+    def DrawAnnotations(self, task, coco, img, image, cat_ids: Optional[object], cat_id: Optional[object]):
+        """
+
+        """
         if task == "all":
             anns_ids = coco.getAnnIds(imgIds=img['id'], catIds=cat_ids, iscrowd=None)
             category_name = "Annotations"
@@ -53,7 +57,7 @@ class CreateJson:
             print("Run 'CreateJsonAnnotation' to create one")
         else:
             coco, img, image, cat_ids = self.BaseDrawAnnotatoins()
-            self.DrawAnnotations("all", coco, img, image, cat_ids, _)
+            self.DrawAnnotations("all", coco, img, image, cat_ids, None)
 
     def VisualizeByClass(self):
         if self.Json is None:
@@ -62,7 +66,7 @@ class CreateJson:
         else:
             coco, img, image, cat_ids = self.BaseDrawAnnotatoins()
             for cat_id in cat_ids:
-                self.DrawAnnotations("byclass", coco, img, image, _, cat_id)
+                self.DrawAnnotations("byclass", coco, img, image, None, cat_id)
 
     def CreateJsonAnnotation(self):
         with open(f'{MAIN_DIR}/FaceSegmentation/docks/Constant/Formats/JSON/ConstantData.json', 'r') as f:

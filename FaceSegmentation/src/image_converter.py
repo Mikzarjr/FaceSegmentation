@@ -1,5 +1,4 @@
 import _io
-import logging
 import os
 from functools import singledispatch
 
@@ -12,63 +11,65 @@ from matplotlib import pyplot as plt
 from FaceSegmentation.src.helpers import get_image_format
 from FaceSegmentation.src.utils import colored_log
 
-logging.basicConfig(level=logging.INFO)
-
 
 @singledispatch
-def process(value):
-    logging.info(f"Default processing for {value}")
+def ImageConverter(value):
+    valid_types = ["Pathname", "Numpy Array", "PIL image", "Tensor"]
+    colored_log("ERROR", f"Incorrect Image type: '{value}', please input image in one of the following types: {valid_types}")
 
 
-@process.register(str)
+@ImageConverter.register(str)
 def _(value):
     try:
         if not os.path.exists(value):
             raise FileNotFoundError(f"File not found: {value}")
         image_format = get_image_format(value)
         if image_format is None:
-            logging.warning(f"File at {value} is not recognized as a valid image.")
+            colored_log("WARNING", f"File at {value} is not recognized as a valid image.")
         else:
-            colored_log('INFO', f"Processing {image_format} image from path: {value}")
-            # logging.info(f"Processing {image_format} image from path: {value}")
+            colored_log("INFO", f"Processing {image_format} image from path: {value}")
     except Exception as e:
-        logging.error(f"Error processing file path: {e}")
+        colored_log("ERROR", f"Error processing file path: {e}")
 
 
-@process.register(np.ndarray)
+@ImageConverter.register(np.ndarray)
 def _(value):
     if len(value.shape) == 2:
-        logging.info(f"Image processed as Numpy Array: {value.shape}")
+        colored_log("INFO", f"Image processed as Numpy Array: {value.shape}")
     else:
-        logging.info(f"Image processed as Numpy Array: {value.shape}")
+        colored_log("INFO", f"Image processed as Numpy Array: {value.shape}")
 
 
-@process.register(PIL.Image.Image)
+@ImageConverter.register(PIL.Image.Image)
 def _(value):
     print(f"Image processed as PIL image with format: {value.format}")
 
 
-@process.register(torch.Tensor)
+@ImageConverter.register(torch.Tensor)
 def _(value):
     print(f"Image processed as Tensor: {value}")
 
 
-@process.register(_io.BytesIO)
+@ImageConverter.register(_io.BytesIO)
 def _(value):
     print(f"Image processed as In-memory Binary Streams: {value}")
 
 
-@process.register(bytes)
+@ImageConverter.register(bytes)
 def _(value):
     print(f"Image processed as Raw Bytes: {value}")
 
 
-@process.register(plt.Figure)
+@ImageConverter.register(plt.Figure)
 def _(value):
     print(f"Image processed as Matplotlib Figure: {value}")
 
 
-image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/constant/Assets/TestImages/img1.jpeg"
+# image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/constant/Assets/TestImages/img1.jpeg"
+image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/FaceSegmentation/src/image_converter.py"
+# image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/constant/Assets/TestImages/1.sm.webp"
+
+
 # cv2_image = cv2.imread(image_path)
 # PIL_image = Image.open(image_path)
 #
@@ -81,7 +82,7 @@ image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/constant/Assets/Tes
 # with open(image_path, "rb") as f:
 #     raw_bytes_image = f.read()
 
-process(image_path)
+ImageConverter(False)
 # process(cv2_image)
 # process(PIL_image)
 # process(tensor_img)
