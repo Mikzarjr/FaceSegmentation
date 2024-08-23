@@ -2,6 +2,7 @@ import inspect
 import linecache
 import logging
 import os
+import sys
 
 HINT_LEVEL = 5
 logging.addLevelName(HINT_LEVEL, "HINT")
@@ -39,7 +40,7 @@ def colored_log(level: str, message: str) -> None:
         'INFO': "GREEN",
         'WARNING': "YELLOW",
         'ERROR': "RED",
-        'CRITICAL': "BOLD_BRIGHT_RED",
+        'CRITICAL': "BRIGHT_RED",
     }.get(level)
     if level == 'ERROR':
         message = (f":\t{message}\n"
@@ -50,25 +51,6 @@ def colored_log(level: str, message: str) -> None:
         message = f"\n{'*' * (len(message) + 4)}\n* {message.upper()} *\n{'*' * (len(message) + 4)}\n\n"
 
     return logger.log(getattr(logging, level, HINT_LEVEL if level == 'HINT' else None), colored_string(message, color))
-
-
-def show_error(error):
-    frame = inspect.currentframe()
-    caller_frame = frame.f_back
-    error_messages = []
-
-    while caller_frame:
-        filename = caller_frame.f_code.co_filename
-        lineno = caller_frame.f_lineno
-        funcname = caller_frame.f_code.co_name
-        code_line = linecache.getline(filename, lineno).strip()
-        error_message = (f"\nIn file {filename}:{lineno}, function '{funcname}'\n\t"
-                         f"{code_line}")
-        error_messages.append(error_message)
-        caller_frame = caller_frame.f_back
-
-    for message in reversed(error_messages):
-        colored_log("ERROR", message)
 
 
 def colored_string(string, color):
@@ -100,18 +82,26 @@ def colored_string(string, color):
         return ''
 
 
-def example_function():
-    try:
-        raise ValueError("An example error occurred")
-    except ValueError as e:
-        show_error(str(e))
+def show_error(error):
+    colored_log("ERROR", colored_string(error, 'bright_red'))
+    frame = inspect.currentframe()
+    caller_frame = frame.f_back.f_back
+    error_messages = []
 
+    while caller_frame:
+        filename = caller_frame.f_code.co_filename
+        lineno = caller_frame.f_lineno
+        funcname = caller_frame.f_code.co_name
+        code_line = linecache.getline(filename, lineno).strip()
+        error_message = (f"\nIn file {filename}:{lineno}, function '{funcname}'\n\t"
+                         f"{code_line}")
+        error_messages.append(error_message)
+        caller_frame = caller_frame.f_back
 
-def deep_function():
-    example_function()
+    for message in reversed(error_messages):
+        colored_log("ERROR", message)
 
-
-deep_function()
+    sys.exit(1)
 
 
 def set_paths() -> tuple[str, str, str, str, str]:
