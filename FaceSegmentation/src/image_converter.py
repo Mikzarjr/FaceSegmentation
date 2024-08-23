@@ -14,8 +14,10 @@ from FaceSegmentation.src.utils import colored_log
 
 @singledispatch
 def ImageConverter(value):
-    valid_types = ["Pathname", "Numpy Array", "PIL image", "Tensor"]
-    colored_log("ERROR", f"Incorrect Image type: '{value}', please input image in one of the following types: {valid_types}")
+    valid_types = ", ".join(("Pathname", "Numpy Array", "PIL image", "Tensor"))
+    colored_log("ERROR",
+                f"Input image type \033[1;91m'{str(value)}'\033[0m not supported\nPlease input image in one "
+                f"of the following supported types: {valid_types}")
 
 
 @ImageConverter.register(str)
