@@ -2,6 +2,7 @@ import _io
 from functools import singledispatch
 
 import PIL.JpegImagePlugin
+import cv2
 import numpy as np
 import torch
 from PIL import Image
@@ -65,4 +66,4 @@ def _(value):
 
 
 image_path = "/Users/mike/Documents/GitHub/Face-Segmentation/constant/Assets/TestImages/img1.jpeg"
-ImageConverter(image_path)
+ImageConverter(0)
