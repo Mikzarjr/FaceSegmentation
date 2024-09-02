@@ -38,10 +38,10 @@ def colored_log(level: str, message: str) -> None:
     logging.basicConfig(level=HINT_LEVEL)
     logger = logging.getLogger(__name__)
     color = {
-        'HINT': "BLUE",
-        'INFO': "GREEN",
-        'WARNING': "YELLOW",
-        'ERROR': "RED",
+        'HINT': "BRIGHT_BLUE",
+        'INFO': "BRIGHT_GREEN",
+        'WARNING': "BRIGHT_YELLOW",
+        'ERROR': "BRIGHT_RED",
         'CRITICAL': "BRIGHT_RED",
     }.get(level)
     if level == 'ERROR':
@@ -73,7 +73,7 @@ def colored_string(string: any, color: str) -> Optional[str]:
         "BLUE": "34",
         "MAGENTA": "35",
         "CYAN": "36",
-        "WHITE": "37",
+        "BLACK": "37",
         "BRIGHT_BLACK": "1;90",
         "BRIGHT_RED": "1;91",
         "BRIGHT_GREEN": "1;92",
@@ -88,10 +88,19 @@ def colored_string(string: any, color: str) -> Optional[str]:
     cc = colors.get(color.upper())
     if cc:
         begin = f"\033[{cc}m"
-        end = "\033[0m"
+        end = "\033[m"
+
         return begin + string + end
     else:
-        show_error(f"Unproper color: '{color}' in string: '{string}'")
+        colors_to_select_str = ""
+        for col in colors:
+            colors_to_select_str += colored_string(col, col) + ' '
+
+        show_error(f"Unproper color: '{colored_string(color, "BRIGHT_WHITE")}' in string: '{string}'\n"
+                   f"You can select from colors:\n"
+                   f"{colored_string('* ', "BRIGHT_WHITE") * (int((visible_length(colors_to_select_str) + 4) / 2))}\n"
+                   f"{colored_string("* ", "BRIGHT_WHITE")}{colors_to_select_str}{colored_string("*", "BRIGHT_WHITE")}\n"
+                   f"{colored_string('* ', "BRIGHT_WHITE") * (int((visible_length(colors_to_select_str) + 4) / 2))}")
 
 
 def visible_length(s: str) -> int:
@@ -99,8 +108,15 @@ def visible_length(s: str) -> int:
     return len(ansi_escape.sub('', s))
 
 
-def show_error(error: str) -> None:
-    colored_log("ERROR", colored_string(error, 'bright_red'))
+def show_error(error_description: str) -> None:
+    """
+    :Description:
+    Shows error in logger (terminal)
+
+    :param error_description: Description of an error
+    :rtype: None
+    """
+    colored_log("ERROR", colored_string(error_description, 'BRIGHT_RED'))
     frame = inspect.currentframe()
     caller_frame = frame.f_back
     error_messages = []
