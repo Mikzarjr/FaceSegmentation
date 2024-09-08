@@ -46,8 +46,7 @@ def colored_log(level: str, message: str) -> None:
     }.get(level)
     if level == 'ERROR':
         message = (f":\t{message}\n"
-                   f"{'-' * (max(visible_length(message.split('\n')[0]) + 20,
-                                 visible_length(max(message.split('\n'), key=visible_length))))}"
+                   f"{'-' * (max(visible_length(message.split('\n')[0]) + 20, visible_length(max(message.split('\n'), key=visible_length))))}"
                    f"\n")
     if level == 'CRITICAL':
         message = f"\n{'*' * (len(message) + 4)}\n* {message.upper()} *\n{'*' * (len(message) + 4)}\n\n"
