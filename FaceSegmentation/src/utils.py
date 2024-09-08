@@ -95,7 +95,7 @@ def colored_string(string: any, color: str) -> Optional[str]:
         for col in colors:
             colors_to_select_str += colored_string(col, col) + ' '
 
-        show_error(f"Unproper color: '{colored_string(color, "BRIGHT_WHITE")}' in string: '{string}'\n"
+        show_error(f"Unproper color: '{colored_string(color, 'BRIGHT_WHITE')}' in string: '{string}'\n"
                    f"You can select from colors:\n"
                    f"{colored_string('* ', "BRIGHT_WHITE") * (int((visible_length(colors_to_select_str) + 4) / 2))}\n"
                    f"{colored_string("* ", "BRIGHT_WHITE")}{colors_to_select_str}{colored_string("*", "BRIGHT_WHITE")}\n"
