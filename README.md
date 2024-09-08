@@ -1,5 +1,7 @@
 # **FaceSeg**
 > [!Note]
+> (Currently in progress)
+> 
 > The [next version](https://github.com/Mikzarjr/Ultimate-Segmentation) of `CLIP-DINO-SAM` combination will come out soon!📆
 
 > [!Tip]
